@@ -87,7 +87,7 @@ export function CaseStudyCard({
                 {study.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-full border border-border/70 px-2.5 py-1 text-[0.7rem] text-muted-foreground"
+                    className="rounded-full border border-border/70 px-2.5 py-1 text-xs text-muted-foreground"
                   >
                     {tag}
                   </span>
@@ -97,7 +97,7 @@ export function CaseStudyCard({
                 <div className="text-base font-semibold text-foreground">
                   {study.metric.value}
                 </div>
-                <div className="text-[0.65rem] text-muted-foreground">
+                <div className="text-xs text-muted-foreground">
                   {study.metric.label}
                 </div>
               </div>
@@ -150,7 +150,7 @@ export function CaseStudyCard({
               {study.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-border/70 px-2.5 py-1 text-[0.7rem] text-muted-foreground"
+                  className="rounded-full border border-border/70 px-2.5 py-1 text-xs text-muted-foreground"
                 >
                   {tag}
                 </span>
@@ -160,7 +160,7 @@ export function CaseStudyCard({
               <div className="text-base font-semibold text-foreground">
                 {study.metric.value}
               </div>
-              <div className="text-[0.65rem] text-muted-foreground">
+              <div className="text-xs text-muted-foreground">
                 {study.metric.label}
               </div>
             </div>

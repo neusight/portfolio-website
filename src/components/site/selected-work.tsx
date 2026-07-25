@@ -1,10 +1,9 @@
-import { CASE_STUDIES } from "@/lib/data";
 import { Reveal } from "@/components/site/reveal";
-import { CaseStudyCard } from "@/components/site/case-study-card";
+import { WorkGate } from "@/components/site/work-gate";
 
 export function SelectedWork() {
   return (
-    <section id="work" className="relative mx-auto max-w-6xl px-5 py-28 sm:px-8">
+    <section id="work" className="relative mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-28">
       <Reveal>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -22,17 +21,7 @@ export function SelectedWork() {
         </div>
       </Reveal>
 
-      <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2">
-        {CASE_STUDIES.map((study, i) => (
-          <Reveal
-            key={study.slug}
-            delay={i * 0.08}
-            className={i === 0 ? "sm:col-span-2" : undefined}
-          >
-            <CaseStudyCard study={study} featured={i === 0} />
-          </Reveal>
-        ))}
-      </div>
+      <WorkGate />
     </section>
   );
 }

@@ -21,7 +21,7 @@ const PILLARS = [
 
 export function ValueProp() {
   return (
-    <section className="relative mx-auto max-w-6xl px-5 py-24 sm:px-8">
+    <section className="relative mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
       <Reveal>
         <span className="text-sm font-semibold tracking-[0.2em] text-muted-foreground uppercase">
           Design + Engineering + AI
@@ -44,8 +44,10 @@ export function ValueProp() {
             delay={i * 0.08}
             className="rounded-2xl border border-border/70 bg-card p-6"
           >
-            <pillar.icon className="size-5 text-muted-foreground" />
-            <h3 className="mt-4 text-lg font-semibold">{pillar.title}</h3>
+            <pillar.icon className="mx-auto size-5 text-muted-foreground sm:mx-0" />
+            <h3 className="mt-4 text-center text-lg font-semibold sm:text-left">
+              {pillar.title}
+            </h3>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
               {pillar.body}
             </p>

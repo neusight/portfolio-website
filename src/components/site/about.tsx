@@ -3,7 +3,7 @@ import { Reveal } from "@/components/site/reveal";
 
 export function About() {
   return (
-    <section id="about" className="relative mx-auto max-w-6xl px-5 py-28 sm:px-8">
+    <section id="about" className="relative mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-28">
       <Reveal>
         <span className="text-sm font-semibold tracking-[0.2em] text-muted-foreground uppercase">
           About
