@@ -1,0 +1,40 @@
+import { PROCESS } from "@/lib/data";
+import { Reveal } from "@/components/site/reveal";
+
+export function Process() {
+  return (
+    <section
+      id="process"
+      className="relative mx-auto max-w-6xl px-5 py-28 sm:px-8"
+    >
+      <Reveal>
+        <span className="font-accent text-gradient text-lg italic">
+          How I work
+        </span>
+        <h2 className="font-display mt-2 max-w-xl text-3xl font-medium tracking-tight text-balance sm:text-4xl">
+          A process built for products that can&rsquo;t afford a redo.
+        </h2>
+      </Reveal>
+
+      <div className="relative mt-14 grid grid-cols-1 gap-px overflow-hidden rounded-3xl border border-border/70 bg-border/70 sm:grid-cols-2 lg:grid-cols-4">
+        {PROCESS.map((item, i) => (
+          <Reveal
+            key={item.step}
+            delay={i * 0.08}
+            className="group relative bg-card p-7"
+          >
+            <span className="text-gradient font-display text-3xl font-semibold">
+              {item.step}
+            </span>
+            <h3 className="font-display mt-5 text-lg font-medium">
+              {item.title}
+            </h3>
+            <p className="mt-2.5 text-sm text-muted-foreground">
+              {item.body}
+            </p>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
