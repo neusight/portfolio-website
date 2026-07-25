@@ -1,16 +1,5 @@
-import { SKILLS } from "@/lib/data";
+import { SKILLS, TOOLS } from "@/lib/data";
 import { Reveal } from "@/components/site/reveal";
-
-const MARQUEE_ITEMS = [
-  "Figma",
-  "Framer",
-  "Linear",
-  "React",
-  "Tailwind CSS",
-  "Arc",
-  "Notion",
-  "After Effects",
-];
 
 export function About() {
   return (
@@ -21,21 +10,25 @@ export function About() {
             About
           </span>
           <h2 className="font-display mt-2 text-3xl font-medium tracking-tight text-balance sm:text-4xl">
-            Nine years of turning ambiguity into shipped product.
+            15+ years turning ambiguity into shipped enterprise product.
           </h2>
           <div className="mt-6 space-y-4 text-muted-foreground">
             <p>
-              I&rsquo;m a senior product designer who moves comfortably
-              between strategy decks and component libraries. My favorite
-              projects are the ones nobody has fully defined yet — new
-              product lines, AI-native workflows, systems that have to hold
-              together at scale.
+              I&rsquo;m a strategic product designer and collaborator who has
+              spent the last 15+ years building enterprise products, leading
+              cross-functional teams, and leveraging AI to solve real
+              business problems. Most recently I&rsquo;ve led enterprise
+              pricing experiences at Kroger, partnering with Product,
+              Engineering, Pricing Strategy, Data Science, and executives to
+              define product vision and roadmap.
             </p>
             <p>
-              Before going deep on product, I spent years in brand and
-              front-end development, which is why I obsess over the last
-              10% most teams skip: motion, type rhythm, and the moment a
-              product actually feels considered.
+              &ldquo;I bridge the gap between business strategy and user
+              needs to create experiences that drive results, adoption, and
+              long-term value.&rdquo; That&rsquo;s shown up as design systems
+              built from zero, AI-assisted workflows that speed up research
+              and documentation, and enterprise UX that holds together at
+              scale.
             </p>
           </div>
 
@@ -51,7 +44,7 @@ export function About() {
             <div className="text-sm">
               <div className="font-medium">Sean Watkins</div>
               <div className="text-muted-foreground">
-                Senior Product Designer, open to new roles
+                Senior Product Designer · Cincinnati, OH
               </div>
             </div>
           </div>
@@ -82,7 +75,7 @@ export function About() {
             <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-card to-transparent" />
             <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-card to-transparent" />
             <div className="animate-marquee flex w-max gap-10">
-              {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => (
+              {[...TOOLS, ...TOOLS].map((item, i) => (
                 <span
                   key={`${item}-${i}`}
                   className="text-sm text-muted-foreground"

@@ -27,17 +27,17 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://seanwatkins.design"),
+  metadataBase: new URL("https://seankwatkins.com"),
   title: {
     default: "Sean Watkins — Senior Product Designer",
     template: "%s — Sean Watkins",
   },
   description:
-    "Sean Watkins is a senior product designer crafting systems-led, high-craft digital products for ambitious teams.",
+    "Sean Watkins is a senior product designer with 15+ years building AI-powered enterprise products, currently designing enterprise pricing experiences at Kroger.",
   openGraph: {
     title: "Sean Watkins — Senior Product Designer",
     description:
-      "Sean Watkins is a senior product designer crafting systems-led, high-craft digital products for ambitious teams.",
+      "Sean Watkins is a senior product designer with 15+ years building AI-powered enterprise products, currently designing enterprise pricing experiences at Kroger.",
     type: "website",
   },
 };

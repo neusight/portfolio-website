@@ -62,9 +62,9 @@ export function Hero() {
           transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           className="font-display mt-6 max-w-4xl text-5xl leading-[1.04] font-medium tracking-tight text-balance sm:text-6xl lg:text-7xl"
         >
-          Product design that turns{" "}
-          <span className="font-accent text-gradient italic">complexity</span>{" "}
-          into products people trust.
+          Turning complex enterprise workflows into{" "}
+          <span className="font-accent text-gradient italic">intuitive</span>{" "}
+          experiences.
         </motion.h1>
 
         <motion.p
@@ -73,8 +73,9 @@ export function Hero() {
           transition={{ duration: 0.7, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
           className="mt-6 max-w-xl text-lg text-muted-foreground"
         >
-          {SITE.blurb} Currently {SITE.role.toLowerCase()} focused on 0→1
-          bets, design systems, and the occasional impossible AI problem.
+          {SITE.blurb} Currently designing enterprise pricing experiences at
+          Kroger — previously Climate Pros, The Web and Marketing Bureau, and
+          Belcan.
         </motion.p>
 
         <motion.div
