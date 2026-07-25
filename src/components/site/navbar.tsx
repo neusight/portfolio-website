@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Menu, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +11,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { SITE } from "@/lib/data";
-import { cn } from "@/lib/utils";
 
 const LINKS = [
   { href: "#work", label: "Work" },
@@ -22,24 +20,8 @@ const LINKS = [
 ];
 
 export function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-40 transition-colors duration-300",
-        scrolled
-          ? "border-b border-border/60 bg-background/70 backdrop-blur-md"
-          : "border-b border-transparent bg-transparent",
-      )}
-    >
+    <header className="fixed inset-x-0 top-0 z-40 border-b border-border/60 bg-black">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
         <a href="#top" aria-label="Sean Watkins — home">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -81,7 +63,7 @@ export function Navbar() {
           </div>
           <SheetContent side="right" className="w-full sm:max-w-xs">
             <SheetHeader>
-              <SheetTitle className="font-display">Menu</SheetTitle>
+              <SheetTitle className="font-semibold">Menu</SheetTitle>
             </SheetHeader>
             <nav className="flex flex-col gap-1 px-4">
               {LINKS.map((link) => (

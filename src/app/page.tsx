@@ -1,9 +1,10 @@
 import { Navbar } from "@/components/site/navbar";
 import { Hero } from "@/components/site/hero";
+import { ValueProp } from "@/components/site/value-prop";
 import { SelectedWork } from "@/components/site/selected-work";
 import { About } from "@/components/site/about";
 import { Process } from "@/components/site/process";
-import { Philosophy } from "@/components/site/philosophy";
+import { Testimonials } from "@/components/site/testimonials";
 import { Contact } from "@/components/site/contact";
 import { Footer } from "@/components/site/footer";
 
@@ -13,10 +14,11 @@ export default function Home() {
       <Navbar />
       <main className="flex-1">
         <Hero />
+        <ValueProp />
         <SelectedWork />
         <About />
         <Process />
-        <Philosophy />
+        <Testimonials />
         <Contact />
       </main>
       <Footer />

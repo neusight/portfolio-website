@@ -11,10 +11,10 @@ export function Contact() {
         <div className="relative isolate overflow-hidden rounded-[2.5rem] border border-border/70 bg-card px-6 py-16 text-center sm:px-16 sm:py-24">
           <GradientMesh className="opacity-50" />
           <div className="relative">
-            <span className="font-accent text-gradient text-lg italic">
+            <span className="text-sm font-semibold tracking-[0.2em] text-muted-foreground uppercase">
               Let&rsquo;s build something worth shipping
             </span>
-            <h2 className="font-display mx-auto mt-3 max-w-2xl text-4xl font-medium tracking-tight text-balance sm:text-5xl">
+            <h2 className="mx-auto mt-3 max-w-2xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
               Hiring a senior product designer?
             </h2>
             <p className="mx-auto mt-5 max-w-md text-muted-foreground">

@@ -8,10 +8,10 @@ export function Process() {
       className="relative mx-auto max-w-6xl px-5 py-28 sm:px-8"
     >
       <Reveal>
-        <span className="font-accent text-gradient text-lg italic">
+        <span className="text-sm font-semibold tracking-[0.2em] text-muted-foreground uppercase">
           How I work
         </span>
-        <h2 className="font-display mt-2 max-w-xl text-3xl font-medium tracking-tight text-balance sm:text-4xl">
+        <h2 className="mt-3 max-w-xl text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
           A process built for products that can&rsquo;t afford a redo.
         </h2>
       </Reveal>
@@ -23,10 +23,10 @@ export function Process() {
             delay={i * 0.08}
             className="group relative bg-card p-7"
           >
-            <span className="text-gradient font-display text-3xl font-semibold">
+            <span className="text-muted-foreground/40 text-3xl font-semibold">
               {item.step}
             </span>
-            <h3 className="font-display mt-5 text-lg font-medium">
+            <h3 className="mt-5 text-lg font-semibold">
               {item.title}
             </h3>
             <p className="mt-2.5 text-sm text-muted-foreground">

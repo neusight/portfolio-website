@@ -8,10 +8,10 @@ export function SelectedWork() {
       <Reveal>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <span className="font-accent text-gradient text-lg italic">
+            <span className="text-sm font-semibold tracking-[0.2em] text-muted-foreground uppercase">
               Selected work
             </span>
-            <h2 className="font-display mt-2 max-w-xl text-3xl font-medium tracking-tight text-balance sm:text-4xl">
+            <h2 className="mt-3 max-w-xl text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
               A few problems worth telling you about.
             </h2>
           </div>

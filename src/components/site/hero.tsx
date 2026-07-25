@@ -9,7 +9,7 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="relative isolate flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-black pt-16"
+      className="relative isolate flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-black pt-16 pb-12"
     >
       <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center px-5 text-center sm:px-8">
         <motion.div
@@ -26,12 +26,12 @@ export function Hero() {
         </motion.div>
 
         <motion.img
-          src="/signature.png"
-          alt="Sean Watkins"
+          src="/hero-header.png"
+          alt="Sean K. Watkins — Design, AI, Innovate"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-          className="mix-blend-screen mt-10 h-auto w-64 sm:w-80 lg:w-96"
+          className="mix-blend-screen mt-10 h-auto w-full max-w-md sm:max-w-xl lg:max-w-2xl"
         />
 
         <motion.p
@@ -62,24 +62,24 @@ export function Hero() {
             </a>
           </Button>
         </motion.div>
-      </div>
 
-      <motion.a
-        href="#work"
-        aria-label="Scroll to work"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.9 }}
-        className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-xs text-muted-foreground sm:flex"
-      >
-        <span>Scroll</span>
-        <motion.span
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+        <motion.a
+          href="#work"
+          aria-label="Scroll to work"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.9 }}
+          className="mt-8 hidden flex-col items-center gap-2 text-xs text-muted-foreground sm:flex"
         >
-          <ArrowDown className="size-3.5" />
-        </motion.span>
-      </motion.a>
+          <span>Scroll</span>
+          <motion.span
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <ArrowDown className="size-3.5" />
+          </motion.span>
+        </motion.a>
+      </div>
     </section>
   );
 }

@@ -9,8 +9,6 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
-  --font-display: var(--font-display);
-  --font-accent: var(--font-accent);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -194,13 +192,6 @@
     box-shadow:
       0 0 0 1px oklch(1 0 0 / 8%),
       0 20px 60px -20px color-mix(in oklch, var(--grad-violet) 55%, transparent);
-  }
-
-  .font-display {
-    font-family: var(--font-display);
-  }
-  .font-accent {
-    font-family: var(--font-accent);
   }
 }
 
