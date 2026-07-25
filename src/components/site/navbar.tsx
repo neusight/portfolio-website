@@ -41,12 +41,13 @@ export function Navbar() {
       )}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
-        <a
-          href="#top"
-          className="font-display text-base font-semibold tracking-tight"
-        >
-          Sean Watkins
-          <span className="text-gradient">.</span>
+        <a href="#top" aria-label="Sean Watkins — home">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/signature-mark.png"
+            alt="Sean Watkins"
+            className="mix-blend-screen h-8 w-auto"
+          />
         </a>
 
         <nav className="hidden items-center gap-8 md:flex">

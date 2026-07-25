@@ -1,4 +1,4 @@
-import { SKILLS, TOOLS } from "@/lib/data";
+import { SKILLS, STATS, TOOLS } from "@/lib/data";
 import { Reveal } from "@/components/site/reveal";
 
 export function About() {
@@ -48,9 +48,23 @@ export function About() {
               </div>
             </div>
           </div>
+
+          <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-6 border-t border-border/70 pt-8 sm:grid-cols-4 lg:grid-cols-2">
+            {STATS.map((stat) => (
+              <div key={stat.label}>
+                <dt className="sr-only">{stat.label}</dt>
+                <dd className="font-display text-2xl font-medium tracking-tight sm:text-3xl">
+                  {stat.value}
+                </dd>
+                <div className="mt-1 text-xs text-muted-foreground">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </dl>
         </Reveal>
 
-        <Reveal delay={0.1}>
+        <Reveal delay={0.1} className="min-w-0">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {SKILLS.map((group) => (
               <div

@@ -1,48 +1,17 @@
 "use client";
 
-import { useRef } from "react";
 import { motion } from "motion/react";
 import { ArrowDown, ArrowUpRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { GradientMesh } from "@/components/site/gradient-mesh";
-import { SITE, STATS } from "@/lib/data";
+import { SITE } from "@/lib/data";
 
 export function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  const handlePointerMove = (event: React.MouseEvent<HTMLElement>) => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    el.style.setProperty("--spot-x", `${event.clientX - rect.left}px`);
-    el.style.setProperty("--spot-y", `${event.clientY - rect.top}px`);
-  };
-
   return (
     <section
       id="top"
-      ref={sectionRef}
-      onMouseMove={handlePointerMove}
-      className="relative isolate flex min-h-[100svh] flex-col justify-center overflow-hidden pt-16"
-      style={
-        {
-          "--spot-x": "50%",
-          "--spot-y": "20%",
-        } as React.CSSProperties
-      }
+      className="relative isolate flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-black pt-16"
     >
-      <GradientMesh className="opacity-80" />
-
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-70 transition-[background] duration-300"
-        style={{
-          background:
-            "radial-gradient(600px circle at var(--spot-x) var(--spot-y), color-mix(in oklch, var(--grad-violet) 18%, transparent), transparent 70%)",
-        }}
-      />
-
-      <div className="relative mx-auto w-full max-w-6xl px-5 sm:px-8">
+      <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center px-5 text-center sm:px-8">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -56,33 +25,29 @@ export function Hero() {
           {SITE.availability}
         </motion.div>
 
-        <motion.h1
+        <motion.img
+          src="/signature.png"
+          alt="Sean Watkins"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="font-display mt-6 max-w-4xl text-5xl leading-[1.04] font-medium tracking-tight text-balance sm:text-6xl lg:text-7xl"
-        >
-          Turning complex enterprise workflows into{" "}
-          <span className="font-accent text-gradient italic">intuitive</span>{" "}
-          experiences.
-        </motion.h1>
+          transition={{ duration: 0.8, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+          className="mix-blend-screen mt-10 h-auto w-64 sm:w-80 lg:w-96"
+        />
 
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-6 max-w-xl text-lg text-muted-foreground"
+          transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="-mt-2 text-sm tracking-[0.2em] text-muted-foreground uppercase"
         >
-          {SITE.blurb} Currently designing enterprise pricing experiences at
-          Kroger — previously Climate Pros, The Web and Marketing Bureau, and
-          Belcan.
+          {SITE.role} · {SITE.location}
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.32, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-9 flex flex-wrap items-center gap-3"
+          transition={{ duration: 0.7, delay: 0.42, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-10 flex flex-wrap items-center justify-center gap-3"
         >
           <Button asChild size="lg" className="gap-1.5 px-5">
             <a href="#work">
@@ -97,25 +62,6 @@ export function Hero() {
             </a>
           </Button>
         </motion.div>
-
-        <motion.dl
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.5 }}
-          className="mt-16 grid max-w-2xl grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4"
-        >
-          {STATS.map((stat) => (
-            <div key={stat.label}>
-              <dt className="sr-only">{stat.label}</dt>
-              <dd className="font-display text-2xl font-medium tracking-tight sm:text-3xl">
-                {stat.value}
-              </dd>
-              <div className="mt-1 text-xs text-muted-foreground">
-                {stat.label}
-              </div>
-            </div>
-          ))}
-        </motion.dl>
       </div>
 
       <motion.a
