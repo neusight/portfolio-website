@@ -44,8 +44,8 @@ export function ValueProp() {
             delay={i * 0.08}
             className="rounded-2xl border border-border/70 bg-card p-6"
           >
-            <pillar.icon className="mx-auto size-5 text-muted-foreground sm:mx-0" />
-            <h3 className="mt-4 text-center text-lg font-semibold sm:text-left">
+            <pillar.icon className="mx-auto size-5 text-muted-foreground" />
+            <h3 className="mt-4 text-center text-lg font-semibold">
               {pillar.title}
             </h3>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
