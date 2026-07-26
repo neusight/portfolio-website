@@ -14,3 +14,7 @@ Never chain build → deploy → push automatically after a change. For every ch
 4. Only then: `npm run build`, `wrangler pages deploy out --project-name portfolio-website --branch main`, and `git commit` / `git push`
 
 This applies to every change going forward, not just first-time setup.
+
+# Brand
+
+**Patent gradient** — the site's signature brand gradient (violet → fuchsia → orange). CSS var: `--gradient-signature` in `src/app/globals.css` (stops: `--grad-violet` `#8b5cf6`, `--grad-fuchsia` `#f0469b`, `--grad-orange` `#ff8a3d`). For SVG icons, reference the shared `<linearGradient id="patent-gradient">` rendered once via `PatentGradientDefs` (`src/components/site/patent-gradient-defs.tsx`) — apply with `fill="url(#patent-gradient)"` (brand marks) or `stroke="url(#patent-gradient)"` (outline icons like lucide). Used for: the "SW" avatar mark, the work-gate reveal flash, the About section glow, and social/brand icons.

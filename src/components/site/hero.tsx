@@ -12,33 +12,31 @@ export function Hero() {
       className="relative isolate flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-black pt-16 pb-12"
     >
       <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center px-5 text-center sm:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-card/60 px-3.5 py-1.5 text-xs text-muted-foreground backdrop-blur"
-        >
-          <span className="relative flex size-1.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/70" />
-            <span className="relative inline-flex size-1.5 rounded-full bg-emerald-400" />
-          </span>
-          {SITE.availability}
-        </motion.div>
-
         <motion.img
           src="/hero-header.png"
           alt="Sean K. Watkins — Design, AI, Innovate"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-          className="mix-blend-screen mt-10 h-auto w-full max-w-md sm:max-w-xl lg:max-w-2xl"
+          className="mix-blend-screen h-auto w-full max-w-md sm:max-w-xl lg:max-w-2xl"
         />
 
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-5 text-sm font-semibold tracking-[0.2em] text-muted-foreground uppercase"
+        >
+          Design <span className="text-destructive">•</span>{" "}
+          <span className="text-destructive">AI</span>{" "}
+          <span className="text-destructive">•</span> Innovate
+        </motion.p>
+
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="-mt-2 text-sm tracking-[0.2em] text-muted-foreground uppercase"
+          className="mt-5 text-sm tracking-[0.2em] text-muted-foreground uppercase"
         >
           {SITE.role} · {SITE.location}
         </motion.p>

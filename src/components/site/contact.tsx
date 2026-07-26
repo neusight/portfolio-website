@@ -1,7 +1,6 @@
 import { GradientMesh } from "@/components/site/gradient-mesh";
 import { Reveal } from "@/components/site/reveal";
 import { ContactForm } from "@/components/site/contact-form";
-import { SITE } from "@/lib/data";
 
 export function Contact() {
   return (
@@ -14,29 +13,15 @@ export function Contact() {
               Let&rsquo;s build something worth shipping
             </span>
             <h2 className="mx-auto mt-3 max-w-2xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-              Hiring a senior product designer?
+              Solving a hard problem? I&rsquo;d love to help.
             </h2>
             <p className="mx-auto mt-5 max-w-md text-muted-foreground">
-              {SITE.availability}. I&rsquo;m happiest on teams tackling
-              genuinely hard product problems — say hello.
+              I&rsquo;m happiest on teams tackling genuinely hard product
+              problems — say hello.
             </p>
 
             <div className="mx-auto mt-10 max-w-2xl">
               <ContactForm />
-            </div>
-
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
-              {SITE.socials.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="transition-colors hover:text-foreground"
-                >
-                  {social.label}
-                </a>
-              ))}
             </div>
           </div>
         </div>

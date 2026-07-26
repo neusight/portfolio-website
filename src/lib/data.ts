@@ -1,7 +1,7 @@
 export const SITE = {
   name: "Sean Watkins",
   role: "Senior Product Designer",
-  location: "Cincinnati, OH · open to remote",
+  location: "Cincinnati, OH",
   availability: "Open to new roles, Q3 2026",
   email: "seankwatkins@gmail.com",
   blurb:
@@ -9,7 +9,7 @@ export const SITE = {
   socials: [
     {
       label: "LinkedIn",
-      href: "https://www.linkedin.com/in/sean-watkins-7a176a36",
+      href: "https://www.linkedin.com/in/seankwatkins/",
     },
   ],
 };

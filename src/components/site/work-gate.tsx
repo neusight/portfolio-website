@@ -98,7 +98,7 @@ export function WorkGate() {
   return (
     <div
       data-work-gate
-      className="relative mt-12 min-h-[26rem] overflow-hidden rounded-[2.5rem] border border-border/70 bg-black sm:min-h-[28rem]"
+      className="relative isolate mt-12 min-h-[26rem] overflow-hidden rounded-[2.5rem] border border-border/70 bg-black sm:min-h-[28rem]"
     >
       <GradientMesh className="opacity-70" />
 
@@ -111,8 +111,8 @@ export function WorkGate() {
             className="relative flex min-h-[26rem] flex-col items-center justify-center px-6 py-16 text-center sm:min-h-[28rem] sm:px-12"
           >
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
               className="flex w-full max-w-md flex-col items-center"
             >
@@ -128,8 +128,14 @@ export function WorkGate() {
                 className="mix-blend-screen w-full max-w-[18rem] sm:max-w-sm"
               />
 
-              <span className="mt-2 text-sm font-semibold tracking-[0.2em] text-muted-foreground uppercase">
-                Private
+              <p className="mt-3 text-sm font-semibold tracking-[0.2em] text-muted-foreground uppercase">
+                Design <span className="text-destructive">•</span>{" "}
+                <span className="text-destructive">AI</span>{" "}
+                <span className="text-destructive">•</span> Innovate
+              </p>
+
+              <span className="mt-4 text-sm font-semibold tracking-[0.2em] text-muted-foreground uppercase">
+                - Private -
               </span>
               <h3 className="mt-2 text-2xl font-semibold tracking-tight text-balance">
                 Ask for the password to view these case studies.
