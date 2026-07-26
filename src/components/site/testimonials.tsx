@@ -19,7 +19,7 @@ export function Testimonials() {
           <Reveal
             key={t.name}
             delay={i * 0.08}
-            className="flex h-full flex-col rounded-2xl border border-border/70 bg-card p-6"
+            className="flex h-full flex-col rounded-2xl border-gradient-card p-6"
           >
             <Quote className="text-muted-foreground size-6" />
             <p className="mt-4 flex-1 text-sm leading-relaxed text-foreground/90">

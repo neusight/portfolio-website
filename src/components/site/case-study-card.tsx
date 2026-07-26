@@ -65,7 +65,7 @@ export function CaseStudyCard({
         <button
           type="button"
           className={cn(
-            "group relative flex w-full flex-col overflow-hidden rounded-3xl border border-border/70 bg-card text-left transition-all duration-300 hover:-translate-y-1 hover:border-border hover:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]",
+            "group relative flex w-full flex-col overflow-hidden rounded-3xl border-gradient-card text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]",
             featured && "sm:col-span-2",
           )}
         >
@@ -87,7 +87,7 @@ export function CaseStudyCard({
                 {study.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-full border border-border/70 px-2.5 py-1 text-xs text-muted-foreground"
+                    className="rounded-full border-gradient-card px-2.5 py-1 text-xs text-muted-foreground"
                   >
                     {tag}
                   </span>
@@ -150,7 +150,7 @@ export function CaseStudyCard({
               {study.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-border/70 px-2.5 py-1 text-xs text-muted-foreground"
+                  className="rounded-full border-gradient-card px-2.5 py-1 text-xs text-muted-foreground"
                 >
                   {tag}
                 </span>

@@ -129,9 +129,9 @@ export function WorkGate() {
               />
 
               <p className="mt-3 text-sm font-semibold tracking-[0.2em] text-muted-foreground uppercase">
-                Design <span className="text-destructive">•</span>{" "}
-                <span className="text-destructive">AI</span>{" "}
-                <span className="text-destructive">•</span> Innovate
+                Design <span className="text-gradient">•</span>{" "}
+                <span className="text-gradient">AI</span>{" "}
+                <span className="text-gradient">•</span> Innovate
               </p>
 
               <span className="mt-4 text-sm font-semibold tracking-[0.2em] text-muted-foreground uppercase">

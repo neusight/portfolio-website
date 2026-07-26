@@ -29,6 +29,14 @@ Build + deploy first so the live site is confirmed working before committing/pus
 
 "Ship it" only covers steps already shown to and approved by the user per steps 1–3 above — it is not blanket permission to also make further, unreviewed edits.
 
+# Known gotchas
+
+**Sheet/Dialog (Radix) + in-page anchor links don't mix by default.** Any `<a href="#section">` rendered inside a shadcn `Sheet`/`Dialog` (`src/components/ui/sheet.tsx`) — e.g. the mobile nav menu in `navbar.tsx` — must NOT rely on `SheetClose asChild` wrapping the anchor and letting the browser's native hash-jump fire on click. Radix's dialog holds a body scroll lock while open/closing, and the close animation + scroll-lock teardown races the native anchor scroll — the URL hash updates but the page never visually scrolls, so the link looks broken (this happened for real in production once already — see `CHANGELOG.md`).
+
+Fix pattern (already applied in `navbar.tsx`, copy it for any future Sheet nav): make the `Sheet` controlled (`open`/`onOpenChange` state you own), intercept the link's `onClick` with `preventDefault()`, close the sheet, THEN scroll to the target (`element.scrollIntoView({ behavior: "smooth" })`) after a short delay (~320ms, longer than the sheet's own close transition) so the scroll happens once the lock is actually released. Don't just wrap the anchor in `SheetClose` and hope.
+
+Test this specifically after any nav/menu change: open the mobile menu on a narrow viewport and click every link — confirm the page actually scrolls, not just that the URL hash changes.
+
 # Brand
 
 **Patent gradient** — the site's signature brand gradient (violet → fuchsia → orange). CSS var: `--gradient-signature` in `src/app/globals.css` (stops: `--grad-violet` `#8b5cf6`, `--grad-fuchsia` `#f0469b`, `--grad-orange` `#ff8a3d`). For SVG icons, reference the shared `<linearGradient id="patent-gradient">` rendered once via `PatentGradientDefs` (`src/components/site/patent-gradient-defs.tsx`) — apply with `fill="url(#patent-gradient)"` (brand marks) or `stroke="url(#patent-gradient)"` (outline icons like lucide). Used for: the "SW" avatar mark, the work-gate reveal flash, the About section glow, and social/brand icons.

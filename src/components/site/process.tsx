@@ -19,22 +19,26 @@ export function Process() {
               A process built for products that can&rsquo;t afford a redo.
             </h2>
 
-            <div className="relative mt-14 grid grid-cols-1 gap-px overflow-hidden rounded-3xl border border-border/70 bg-border/70 sm:grid-cols-2 lg:grid-cols-4">
-              {PROCESS.map((item, i) => (
-                <Reveal
-                  key={item.step}
-                  delay={i * 0.08}
-                  className="group relative bg-card p-7"
-                >
-                  <span className="text-muted-foreground/40 text-3xl font-semibold">
-                    {item.step}
-                  </span>
-                  <h3 className="mt-5 text-lg font-semibold">{item.title}</h3>
-                  <p className="mt-2.5 text-sm text-muted-foreground">
-                    {item.body}
-                  </p>
-                </Reveal>
-              ))}
+            <div className="gradient-border relative mt-14 rounded-3xl p-px">
+              <div className="grid grid-cols-1 gap-px overflow-hidden rounded-[inherit] bg-border/70 sm:grid-cols-2 lg:grid-cols-4">
+                {PROCESS.map((item, i) => (
+                  <Reveal
+                    key={item.step}
+                    delay={i * 0.08}
+                    className="group relative bg-card p-7"
+                  >
+                    <span className="text-muted-foreground/40 text-3xl font-semibold">
+                      {item.step}
+                    </span>
+                    <h3 className="mt-5 text-lg font-semibold">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2.5 text-sm text-muted-foreground">
+                      {item.body}
+                    </p>
+                  </Reveal>
+                ))}
+              </div>
             </div>
           </div>
         </div>

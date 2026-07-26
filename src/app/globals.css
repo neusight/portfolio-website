@@ -104,6 +104,14 @@
     var(--grad-fuchsia) 52%,
     var(--grad-orange) 100%
   );
+  /* Same gradient, muted — for hairline borders that should read as a
+     faint tint rather than a saturated ring. */
+  --gradient-signature-faint: linear-gradient(
+    135deg,
+    color-mix(in oklch, var(--grad-violet) 28%, transparent) 0%,
+    color-mix(in oklch, var(--grad-fuchsia) 28%, transparent) 52%,
+    color-mix(in oklch, var(--grad-orange) 28%, transparent) 100%
+  );
   --gradient-cool: linear-gradient(
     135deg,
     #6d5dfc 0%,
@@ -178,14 +186,34 @@
     color: transparent;
   }
 
-  /* Hairline gradient border via padding + inner surface trick */
+  /* Hairline gradient border wrapper — pair with p-px + a matching rounded-*
+     class on this element, and the same rounded-* (or rounded-[inherit]) on
+     the single child. Use when the child has no flat background to layer
+     against (images, translucent fills). */
   .gradient-border {
-    position: relative;
-    background: var(--gradient-signature);
-    border-radius: var(--radius-xl);
+    background: var(--gradient-signature-faint);
   }
   .gradient-border > * {
-    border-radius: calc(var(--radius-xl) - 1px);
+    border-radius: inherit;
+  }
+
+  /* Thin gradient border via layered backgrounds — no extra markup needed.
+     Use on elements with a plain `bg-card` fill. */
+  .border-gradient-card {
+    border: 1px solid transparent;
+    background-image: linear-gradient(var(--card), var(--card)),
+      var(--gradient-signature-faint);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+  }
+
+  /* Same trick, for elements filled with plain black (e.g. the work gate). */
+  .border-gradient-black {
+    border: 1px solid transparent;
+    background-image: linear-gradient(#000, #000),
+      var(--gradient-signature-faint);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
   }
 
   .glow-violet {

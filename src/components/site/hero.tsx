@@ -27,9 +27,9 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}
           className="mt-5 text-sm font-semibold tracking-[0.2em] text-muted-foreground uppercase"
         >
-          Design <span className="text-destructive">•</span>{" "}
-          <span className="text-destructive">AI</span>{" "}
-          <span className="text-destructive">•</span> Innovate
+          Design <span className="text-gradient">•</span>{" "}
+          <span className="text-gradient">AI</span>{" "}
+          <span className="text-gradient">•</span> Innovate
         </motion.p>
 
         <motion.p

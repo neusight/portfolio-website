@@ -70,7 +70,7 @@ export function About() {
             <img
               src="/about-graphic.png"
               alt="Sean's approach: AI to design to develop"
-              className="w-full rounded-3xl border border-border/70 shadow-2xl shadow-black/40"
+              className="w-full rounded-3xl shadow-2xl shadow-black/40"
             />
           </div>
         </div>
@@ -97,7 +97,7 @@ export function About() {
           {SKILLS.map((group) => (
             <div
               key={group.category}
-              className="rounded-2xl border border-border/70 bg-card p-5"
+              className="rounded-2xl border-gradient-card p-5"
             >
               <h3 className="text-sm font-semibold tracking-[0.1em] text-muted-foreground uppercase">
                 {group.category}

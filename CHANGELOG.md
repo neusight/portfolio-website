@@ -2,6 +2,17 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-07-26
+
+- Fixed the mobile menu: links now actually scroll to their section instead of silently doing nothing (a Radix dialog/scroll-lock timing bug — documented in `AGENTS.md` so it doesn't come back).
+- Mobile menu hamburger now morphs into an X with a gradient animation, stays visible the whole time the menu is open, and acts as the single close control.
+- Mobile menu background reverted to plain black, with a gradient accent bar next to whichever link you're hovering.
+- Fixed the desktop nav links appearing off-center (the logo and "Let's talk" button are different widths, which broke simple centering — now uses a layout immune to that).
+- Added a thin patent-gradient border to card-style elements site-wide (skills cards, testimonials, pillar cards, case studies and their tags, the process step grid), dialed down to a faint tint rather than a bright ring. Left it as a plain grey border on elements that already have their own gradient glow (the contact card, the password gate, the process section's outer frame) to avoid overloading them with color.
+- Added a gradient "W" favicon.
+- The "AI" and bullets in the "Design • AI • Innovate" tagline now render in the gradient instead of flat red.
+- Removed the border around the About section graphic — it now floats against the background with just the ambient glow framing it.
+
 ## 2026-07-25
 
 - Started keeping this changelog — every ship from now on gets a dated entry here.

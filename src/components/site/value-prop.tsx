@@ -42,7 +42,7 @@ export function ValueProp() {
           <Reveal
             key={pillar.title}
             delay={i * 0.08}
-            className="rounded-2xl border border-border/70 bg-card p-6"
+            className="rounded-2xl border-gradient-card p-6"
           >
             <pillar.icon className="mx-auto size-5 text-muted-foreground" />
             <h3 className="mt-4 text-center text-lg font-semibold">
