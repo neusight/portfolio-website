@@ -2,6 +2,13 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-07-26 (2)
+
+- Mobile menu polish pass: removed the visible "Menu" label, fixed a duplicate close button (the panel's own close X was rendering underneath the animated hamburger/X), and fixed the panel actually covering the header instead of sliding in below it.
+- Mobile menu now does a full right-to-left slide instead of a small nudge.
+- Replaced the mobile nav's scroll-after-close logic with one that waits for the real signal that the menu has finished closing, instead of guessing a fixed delay — the guess was itself an occasional source of "the link didn't scroll" bugs.
+- Removed a stray focus-ring outline that became visible around the mobile menu panel.
+
 ## 2026-07-26
 
 - Fixed the mobile menu: links now actually scroll to their section instead of silently doing nothing (a Radix dialog/scroll-lock timing bug — documented in `AGENTS.md` so it doesn't come back).

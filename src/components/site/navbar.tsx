@@ -8,7 +8,6 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
 import { SITE } from "@/lib/data";
@@ -59,13 +58,34 @@ export function Navbar() {
   ) {
     event.preventDefault();
     setOpen(false);
-    window.setTimeout(() => {
+
+    // Radix releases its body pointer-events lock once the close transition
+    // actually finishes — that isn't on a fixed clock, so wait for the real
+    // signal instead of guessing a delay (a guess-based timeout raced the
+    // lock and silently ate the scroll before — see AGENTS.md gotchas).
+    let done = false;
+    const scrollToTarget = () => {
+      if (done) return;
+      done = true;
+      observer.disconnect();
       document.querySelector(href)?.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
       window.history.pushState(null, "", href);
-    }, 320);
+    };
+
+    const observer = new MutationObserver(() => {
+      if (document.body.style.pointerEvents !== "none") {
+        scrollToTarget();
+      }
+    });
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["style"],
+    });
+
+    window.setTimeout(scrollToTarget, 600);
   }
 
   return (
@@ -122,12 +142,10 @@ export function Navbar() {
             <SheetContent
               side="right"
               showCloseButton={false}
-              className="!top-16 !w-full overflow-hidden bg-black sm:!max-w-xs"
+              className="overflow-hidden bg-black"
             >
-              <SheetHeader>
-                <SheetTitle className="font-semibold">Menu</SheetTitle>
-              </SheetHeader>
-              <nav className="flex flex-col gap-1 px-4">
+              <SheetTitle className="sr-only">Menu</SheetTitle>
+              <nav className="flex flex-col gap-1 px-4 pt-6">
                 {LINKS.map((link) => (
                   <a
                     key={link.href}
