@@ -2,6 +2,10 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-07-26 (3)
+
+- Fixed the password-gate signature: a leftover black box was showing behind it on the gradient background (the floating bounce animation was breaking the image's blend-with-background effect). Signature now blends cleanly into the gradient at full resolution, same as before.
+
 ## 2026-07-26 (2)
 
 - Mobile menu polish pass: removed the visible "Menu" label, fixed a duplicate close button (the panel's own close X was rendering underneath the animated hamburger/X), and fixed the panel actually covering the header instead of sliding in below it.
