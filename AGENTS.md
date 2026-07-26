@@ -21,7 +21,8 @@ When the user says **"ship it"** (or an equivalent explicit go-ahead to publish)
 
 1. `npm run build`
 2. `npx wrangler pages deploy out --project-name portfolio-website --branch main`
-3. `git add` the changed files (specific paths, not `-A`), `git commit` with a descriptive message, `git push origin master`
+3. Add a dated entry to `CHANGELOG.md` (newest first) summarizing what shipped in plain, user-facing language — not a raw dump of commit messages
+4. `git add` the changed files (specific paths, not `-A`, but including `CHANGELOG.md`), `git commit` with a descriptive message, `git push origin master`
 
 Build + deploy first so the live site is confirmed working before committing/pushing. If `git push` fails with `RPC failed; HTTP 400` (this machine's git is v2.8.2, quite old, and mishandles larger pushes over HTTP/2), retry with one-off flags — do not persist to git config:
 `git -c http.postBuffer=524288000 -c http.version=HTTP/1.1 push origin master`
