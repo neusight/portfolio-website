@@ -18,7 +18,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-          className="mix-blend-screen h-auto w-full max-w-md sm:max-w-xl lg:max-w-2xl"
+          className="h-auto w-full max-w-md sm:max-w-xl lg:max-w-2xl"
         />
 
         <motion.p

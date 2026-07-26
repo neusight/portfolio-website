@@ -2,6 +2,10 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-07-26 (4)
+
+- Properly fixed the black box behind the signature (still showed up on mobile after the earlier attempt). The signature image never had real transparency — it was faking it with a CSS blend-mode trick, which is fragile and renders inconsistently across browsers. Rebuilt the image with genuine transparency (same resolution, no quality loss) so it now displays correctly everywhere, no browser-specific tricks involved.
+
 ## 2026-07-26 (3)
 
 - Fixed the password-gate signature: a leftover black box was showing behind it on the gradient background (the floating bounce animation was breaking the image's blend-with-background effect). Signature now blends cleanly into the gradient at full resolution, same as before.
