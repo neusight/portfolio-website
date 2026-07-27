@@ -2,6 +2,10 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-07-26 (6)
+
+- Added the "SKW" brand mark to the footer, sitting just below the Elsewhere section with its own divider line above the copyright row. Colored in the site's signature gradient, with a subtle fade-in on scroll, and sized to stay modest on mobile.
+
 ## 2026-07-26 (5)
 
 - Fixed the mobile menu links again — they'd quietly stopped scrolling to their section. The previous fix waited for the wrong signal to know the menu had finished closing; it now clears the actual thing blocking the scroll directly, so it doesn't depend on an animation finishing at all (which is what let it get stuck in the first place).
