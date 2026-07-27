@@ -2,6 +2,11 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-07-26 (7)
+
+- Updated the downloadable resume to the latest version.
+- Fixed the black box behind the signature for real this time — it was only ever showing up on Chrome on phones. The image itself was fine (genuine transparency, confirmed identical bytes served to every browser); the real cause was the signature's floating bounce animation being applied directly to the image, which pins it to its own persistent hardware layer that some mobile Chrome versions render with an opaque black backing instead of a transparent one. Moved the animation onto a wrapper around the image instead, so the image itself is never directly animated.
+
 ## 2026-07-26 (6)
 
 - Added the "SKW" brand mark to the footer, sitting just below the Elsewhere section with its own divider line above the copyright row. Colored in the site's signature gradient, with a subtle fade-in on scroll, and sized to stay modest on mobile.

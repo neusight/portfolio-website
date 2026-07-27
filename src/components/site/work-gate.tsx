@@ -116,9 +116,7 @@ export function WorkGate() {
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
               className="flex w-full max-w-md flex-col items-center"
             >
-              <motion.img
-                src="/hero-header.png"
-                alt="Sean K. Watkins"
+              <motion.div
                 animate={{ y: [0, -8, 0] }}
                 transition={{
                   duration: 5,
@@ -126,7 +124,13 @@ export function WorkGate() {
                   ease: "easeInOut",
                 }}
                 className="w-full max-w-[18rem] sm:max-w-sm"
-              />
+              >
+                <img
+                  src="/hero-header.png"
+                  alt="Sean K. Watkins"
+                  className="w-full"
+                />
+              </motion.div>
 
               <p className="mt-3 text-sm font-semibold tracking-[0.2em] text-muted-foreground uppercase">
                 Design <span className="text-gradient">•</span>{" "}
