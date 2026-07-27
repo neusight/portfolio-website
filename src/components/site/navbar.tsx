@@ -59,33 +59,22 @@ export function Navbar() {
     event.preventDefault();
     setOpen(false);
 
-    // Radix releases its body pointer-events lock once the close transition
-    // actually finishes — that isn't on a fixed clock, so wait for the real
-    // signal instead of guessing a delay (a guess-based timeout raced the
-    // lock and silently ate the scroll before — see AGENTS.md gotchas).
-    let done = false;
-    const scrollToTarget = () => {
-      if (done) return;
-      done = true;
-      observer.disconnect();
-      document.querySelector(href)?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-      window.history.pushState(null, "", href);
-    };
-
-    const observer = new MutationObserver(() => {
-      if (document.body.style.pointerEvents !== "none") {
-        scrollToTarget();
-      }
+    // The Sheet (Radix Dialog) locks page scroll via a body[data-scroll-locked]
+    // CSS rule (overflow: hidden) for as long as it's mounted, and only
+    // unmounts once its close animation actually finishes — scrollIntoView is
+    // a silent no-op while that's still set. Waiting on the animation to
+    // finish is unreliable (it can get stuck — e.g. under reduced-motion, or
+    // if the tab loses focus mid-transition — leaving the page stuck
+    // unscrollable even after the menu visually looks closed, which is what
+    // broke this before — see AGENTS.md gotchas). Clearing the lock ourselves
+    // sidesteps that entirely: Radix's own cleanup is a counter that no-ops
+    // once it's already at/below zero, so this is safe to do unconditionally.
+    document.body.removeAttribute("data-scroll-locked");
+    document.querySelector(href)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
     });
-    observer.observe(document.body, {
-      attributes: true,
-      attributeFilter: ["style"],
-    });
-
-    window.setTimeout(scrollToTarget, 600);
+    window.history.pushState(null, "", href);
   }
 
   return (

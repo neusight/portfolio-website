@@ -2,6 +2,10 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-07-26 (5)
+
+- Fixed the mobile menu links again — they'd quietly stopped scrolling to their section. The previous fix waited for the wrong signal to know the menu had finished closing; it now clears the actual thing blocking the scroll directly, so it doesn't depend on an animation finishing at all (which is what let it get stuck in the first place).
+
 ## 2026-07-26 (4)
 
 - Properly fixed the black box behind the signature (still showed up on mobile after the earlier attempt). The signature image never had real transparency — it was faking it with a CSS blend-mode trick, which is fragile and renders inconsistently across browsers. Rebuilt the image with genuine transparency (same resolution, no quality loss) so it now displays correctly everywhere, no browser-specific tricks involved.
