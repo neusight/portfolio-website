@@ -26,6 +26,11 @@ export type CaseStudy = {
   metric: { value: string; label: string };
   gradient: "signature" | "cool" | "warm";
   details: { label: string; body: string }[];
+  logo?: { src: string; alt: string; plate?: boolean };
+  mark?: { src: string; alt: string };
+  screens?: { src: string; alt: string; title: string; body: string }[];
+  screensLayout?: "browser" | "phone";
+  map?: { src: string; alt: string; title: string; body: string };
 };
 
 export const CASE_STUDIES: CaseStudy[] = [
@@ -72,6 +77,28 @@ export const CASE_STUDIES: CaseStudy[] = [
     tags: ["0→1", "Design systems", "Agile"],
     metric: { value: "0→1", label: "design system built from scratch" },
     gradient: "cool",
+    logo: { src: "/watchtower-logo-white.png", alt: "WatchTower, powered by Climate Pros" },
+    mark: { src: "/watchtower-mark-white.png", alt: "" },
+    screens: [
+      {
+        src: "/climate-pros-dashboard.png",
+        alt: "WatchTower account dashboard showing location health scores, alarm resolution, work orders, and a location health map",
+        title: "Account dashboard",
+        body: "The landing view for facilities teams — location health scores, alarm and work order resolution, and the most common alarm and intelligence events, all rolled up across every site with a map view for drilling into a single location.",
+      },
+      {
+        src: "/climate-pros-reports.png",
+        alt: "WatchTower account reports flow with a modal for creating a new scheduled report",
+        title: "Account reports",
+        body: "A guided flow for building recurring compliance reports — selecting recipients, a location, and a report type (like FDA hourly temperature logs) without leaving the page.",
+      },
+    ],
+    map: {
+      src: "/climate-pros-intelligence-map.png",
+      alt: "Flow diagram mapping the WatchTower Intelligence module, from location selection through refrigerant leak detection and pressure event drill-down",
+      title: "Mapping the intelligence layer",
+      body: "Before touching Figma, I mapped how location intelligence should actually work — how a user moves from the dashboard into the Location Health Score and Refrigerant Leak Detection modules, and how the pressure-events table drills down into device-level charts. This flow became the shared reference for engineering and product throughout the build.",
+    },
     details: [
       {
         label: "End-to-end design",
@@ -93,63 +120,109 @@ export const CASE_STUDIES: CaseStudy[] = [
   },
   {
     slug: "web-marketing-bureau-ux",
-    title: "Directing UX strategy across a multi-client agency roster",
+    title:
+      "Architecting a 0→1 mobile app — from a single flowchart to a 30-screen production system",
     client: "The Web and Marketing Bureau, LLC",
     year: "Oct 2020 — Apr 2021",
     role: "Senior User Experience Architect",
-    category: "UX Architecture · Team Leadership",
+    category: "UX Architecture · 0→1 Mobile Product Design",
     blurb:
-      "Directed UX strategy across multiple client websites and applications, leading a team of designers to create intuitive, conversion-focused experiences for enterprise clients.",
-    tags: ["UX strategy", "Team leadership", "Client partnership"],
-    metric: { value: "3", label: "designers managed & mentored" },
+      "Owned end-to-end UX architecture for Chattic, a community-driven app for crowdsourcing the value of secondhand finds. Mapped the complete application flow before a single screen was drawn, then designed and specified a 30+ screen production system — onboarding, a social valuation feed, guided item capture, and appraiser matching — while directing a team of designers across the agency's broader client roster.",
+    tags: ["0→1", "Mobile UX", "Team leadership"],
+    metric: { value: "30+", label: "screens architected end-to-end" },
     gradient: "warm",
+    logo: { src: "/chattic-logo.png", alt: "Chattic", plate: true },
+    screensLayout: "phone",
+    screens: [
+      {
+        src: "/chattic-splash.png",
+        alt: "Chattic splash screen with the brand mark on a blue gradient background",
+        title: "Splash & brand entry",
+        body: "The first moment of the experience — the mark animates in, sets tone, and hands off to the home feed in under two seconds.",
+      },
+      {
+        src: "/chattic-feeds.png",
+        alt: "Chattic social feed showing community members asking what their found items are worth",
+        title: "Social valuation feed",
+        body: "The core loop: a member posts a found or inherited item and the community weighs in on what it's worth — part marketplace, part social feed.",
+      },
+      {
+        src: "/chattic-post.png",
+        alt: "Chattic item posting flow with fields for item details and a post button",
+        title: "Item capture & posting",
+        body: "A guided capture flow — photograph the item, add context, and flag whether you're selling or just curious — before it goes live to the community.",
+      },
+    ],
+    map: {
+      src: "/chattic-journey-map.png",
+      alt: "Application flowchart for Chattic mapping the splash screen, home screen navigation, and every core user path",
+      title: "Mapping the app before designing it",
+      body: "Before any screen took shape, I flowcharted the full application — every nav path, state, and decision point — so the client could sign off on scope before design began. That map became the backbone for the 30+ screen system that followed.",
+    },
     details: [
       {
-        label: "UX strategy",
-        body: "Directed UX strategy across multiple client websites and applications using Sketch and Figma.",
+        label: "Product architecture",
+        body: "Mapped the complete application flow — navigation, screen states, and interaction logic — turning an ambiguous app concept into a buildable specification.",
+      },
+      {
+        label: "System design",
+        body: "Designed a 30+ screen production system in Adobe XD using reusable components and grids, covering onboarding, the social feed, item capture, and appraiser matching.",
+      },
+      {
+        label: "Brand & UI",
+        body: "Translated the client's brand identity into a cohesive mobile UI — typography, color, and iconography consistent across every screen and state.",
       },
       {
         label: "Team leadership",
-        body: "Managed and mentored a team of 3 UI designers, driving quality, consistency, and professional growth.",
-      },
-      {
-        label: "Client partnership",
-        body: "Gathered requirements, defined project scope, and delivered solutions that exceeded client goals.",
-      },
-      {
-        label: "Agile delivery",
-        body: "Organized and led daily scrum meetings to ensure timely delivery and clear communication.",
+        body: "Directed and mentored a team of 3 UI designers across the agency's client roster, reviewing work for quality and consistency at delivery.",
       },
     ],
   },
   {
     slug: "belcan-aerospace",
-    title: "Shipping mission-critical interfaces for aerospace clients",
+    title:
+      "Building a real-time production dashboard for GE's jet engine manufacturing line",
     client: "Belcan",
     year: "Oct 2018 — Oct 2020",
     role: "Front End Developer / UX Engineer",
-    category: "Front-End · UX Engineering",
+    category: "Front-End Engineering · Manufacturing UX",
     blurb:
-      "Developed user interfaces and prototypes, collaborated with stakeholders, and owned QA testing to ensure high quality standards across internal and external web applications.",
-    tags: ["UI development", "QA", "Agile delivery"],
-    metric: { value: "2", label: "major aerospace apps launched" },
+      "Built the GE Digital Cockpit, a real-time work-in-progress tracker for GE9X jet engine component manufacturing, translating a 25+ station production line into a dashboard shop-floor operators could read at a glance. Iterated the interface from a flat, single-color action layout to a severity-coded system, and owned QA across internal and external releases.",
+    tags: ["Front-end engineering", "Manufacturing UX", "QA"],
+    metric: { value: "25+", label: "production stations tracked live" },
     gradient: "cool",
-    details: [
+    logo: { src: "/ge-logo-mark.png", alt: "GE", plate: true },
+    mark: { src: "/ge-logo-mark.png", alt: "" },
+    screens: [
       {
-        label: "UI/UX development",
-        body: "Designed and developed high-end client interfaces, ensuring intuitive and engaging experiences.",
+        src: "/ge-cockpit-dashboard.png",
+        alt: "GE Digital Cockpit dashboard with color-coded status cards and a live WIP tracker chart across every production station",
+        title: "Color-coded status cards",
+        body: "The shipped design — quick-action cards color-coded by severity (blue, amber, red, green) so an operator can gauge line health without reading a label, backed by a live WIP tracker spanning every station on the GE9X production line.",
       },
       {
-        label: "Collaboration",
-        body: "Partnered with business owners and developers on new software initiatives.",
+        src: "/ge-cockpit-buttons.png",
+        alt: "Earlier version of the GE Digital Cockpit dashboard with all quick-action cards in a single blue color",
+        title: "Where it started",
+        body: "The original layout used a single accent color for every action card. Recoloring each card by severity turned a glance-and-guess interface into one operators could scan in under a second — a small change with an outsized impact on shop-floor speed.",
+      },
+    ],
+    details: [
+      {
+        label: "Front-end engineering",
+        body: "Built the GE Digital Cockpit end-to-end, rendering live WIP data across 25+ production stations for GE's GE9X engine program.",
+      },
+      {
+        label: "Interaction design",
+        body: "Iterated the quick-action cards from a single-color layout to a severity-coded system, giving operators an at-a-glance read on messages, parts in WIP, parts out of WIP, and completions.",
       },
       {
         label: "Quality assurance",
-        body: "Owned QA testing for internal and external applications, improving quality and reliability.",
+        body: "Owned QA testing across internal and external releases, catching regressions before they reached the shop floor.",
       },
       {
-        label: "Agile delivery",
-        body: "Successfully launched two major aerospace applications through iterative agile sprints.",
+        label: "Cross-functional delivery",
+        body: "Partnered with GE stakeholders and Belcan engineering through agile sprints to ship two major aerospace applications.",
       },
     ],
   },

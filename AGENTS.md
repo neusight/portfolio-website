@@ -41,6 +41,26 @@ Test this specifically after any nav/menu change: open the mobile menu on a narr
 
 Fix pattern: never animate the `<img>` itself. Wrap it in a `motion.div` (or plain `div` + CSS animation) and put the transform there; keep the `<img>` a static child with no `animate`/`transition` props of its own. If you need to test a rendering bug that only shows on real mobile Chrome and doesn't reproduce in desktop Chrome (even with viewport resize or forcing the element's CSS size down) or in Chrome DevTools device emulation, don't keep guessing blind — ask the user for a screenshot from the actual device, and if a dev server is running, have them hit its LAN address (e.g. `http://<local-ip>:3000`, printed in the `next dev` output as "Network:") directly from their phone to test a fix live before shipping.
 
+# Case study modals (`case-study-card.tsx`)
+
+**Adding real assets (logo, screenshots, process diagrams) to a case study.** The `CaseStudy` type (`src/lib/data.ts`) supports optional `logo`, `mark`, `screens[]`, and `map` fields — when a project has real product screenshots (not just the abstract gradient placeholder), populate these instead of leaving the study on the default `CoverArt` mock. Pattern established on the Climate Pros / WatchTower study — copy it for the next project with real assets:
+- `logo` — full lockup (icon + wordmark), light-colored, shown centered on the gradient banner at the top of the modal (`CoverArt` with `context="modal"`).
+- `mark` — icon only, light-colored, shown small and low-opacity as a watermark in the corner of the grid card's cover image (`context="card"`).
+- `screens[]` — real UI screenshots, each rendered in a browser-chrome-style frame (dot bar) with a title/body caption underneath.
+- `map` — a process/flow diagram (e.g. exported from Miro/FigJam); render wide (`w-[1400px] max-w-none`) inside its own `overflow-x-auto` wrapper rather than shrinking it to fit — these diagrams have small text that becomes illegible if scaled down to modal width, so let it scroll horizontally instead.
+
+When cropping a screenshot or exported diagram, check for platform watermarks (Miro/FigJam export badges, etc.) in a corner and remove them — don't ship them. When surgically patching out a watermark that sits near real diagram content, get the pixel bounding box of both first (a naive rectangular patch can clip real nodes/text that overlap the watermark's corner).
+
+**CSS Grid `min-width`/`min-height: auto` will silently blow out the whole dialog if you add wide fixed-width content.** `DialogContent` (`src/components/ui/dialog.tsx`) is `display: grid`. Grid items default to `min-width: auto` (content-based), not `0` — so a wide fixed-width descendant (e.g. a `w-[1400px]` process-diagram image, even inside its own `overflow-x-auto` wrapper) will force the *whole dialog* to grow to fit it, overflowing past `max-w-2xl` and off-screen, because `overflow-y-auto` alone doesn't establish the containment needed to stop it. Symptom looks bizarre and unrelated to the actual cause: e.g. the cover image/logo appearing shifted way off to the bottom-right, outside the rounded card, over the black backdrop — that's the grid track sizing to ~1400px+ while individual children still think they're centered within it.
+
+Fix (both parts needed, already applied):
+1. Every `CoverArt` variant needs an explicit `w-full` (don't rely on grid stretch alone — it doesn't reliably combine with `aspect-[16/9]`).
+2. The modal's content wrapper (the `flex flex-col ... p-6 sm:p-8` div, direct sibling of `CoverArt`) needs `min-w-0` so it can shrink to the grid track instead of expanding it. The oversized child's own `overflow-x-auto` then works correctly, scoped to just that element.
+
+Check both any time you add a new fixed-width or intrinsically-wide element inside a modal.
+
+**Modal spacing near the cover art.** The cover banner (`aspect-[16/9]`) is tall relative to the dialog's `max-h-[85vh]`, so with default padding the title/details can feel like they crowd right up against it on the first scroll. Current values (content wrapper in `case-study-card.tsx`): `pt-10 sm:pt-14` before the title block, `gap-8` between title/blurb/details, and `pt-20` on the details grid's own top padding (on top of its `border-t`). Match these for any new modal content rather than the tighter defaults, since a real logo/photo banner reads as more cramped than the abstract gradient placeholder did.
+
 # Brand
 
 **Patent gradient** — the site's signature brand gradient (violet → fuchsia → orange). CSS var: `--gradient-signature` in `src/app/globals.css` (stops: `--grad-violet` `#8b5cf6`, `--grad-fuchsia` `#f0469b`, `--grad-orange` `#ff8a3d`). For SVG icons, reference the shared `<linearGradient id="patent-gradient">` rendered once via `PatentGradientDefs` (`src/components/site/patent-gradient-defs.tsx`) — apply with `fill="url(#patent-gradient)"` (brand marks) or `stroke="url(#patent-gradient)"` (outline icons like lucide). Used for: the "SW" avatar mark, the work-gate reveal flash, the About section glow, and social/brand icons.

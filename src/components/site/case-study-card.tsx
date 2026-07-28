@@ -18,16 +18,132 @@ const GRADIENTS: Record<CaseStudy["gradient"], string> = {
 function CoverArt({
   study,
   featured,
+  context,
 }: {
   study: CaseStudy;
   featured?: boolean;
+  context: "card" | "modal";
 }) {
+  const aspect = featured ? "aspect-[16/9]" : "aspect-[4/3]";
+
+  if (context === "modal" && study.logo) {
+    return (
+      <div
+        className={cn("relative w-full overflow-hidden", aspect)}
+        style={{ background: GRADIENTS[study.gradient] }}
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.25),transparent_45%)]" />
+        <div className="absolute inset-0 opacity-90 mix-blend-overlay [background-image:radial-gradient(circle,rgba(255,255,255,0.5)_1px,transparent_1px)] [background-size:14px_14px]" />
+        <div className="absolute inset-0 flex items-center justify-center p-10">
+          {study.logo.plate ? (
+            <div className="rounded-3xl bg-white/95 p-6 shadow-[0_8px_24px_rgba(0,0,0,0.25)] sm:p-8">
+              <img
+                src={study.logo.src}
+                alt={study.logo.alt}
+                className="w-full max-w-[10rem] sm:max-w-[11rem]"
+              />
+            </div>
+          ) : (
+            <img
+              src={study.logo.src}
+              alt={study.logo.alt}
+              className="w-full max-w-[15rem] drop-shadow-[0_8px_24px_rgba(0,0,0,0.25)] sm:max-w-[17rem]"
+            />
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (context === "card" && study.screensLayout === "phone" && study.logo) {
+    return (
+      <div
+        className={cn("relative w-full overflow-hidden", aspect)}
+        style={{ background: GRADIENTS[study.gradient] }}
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.25),transparent_45%)]" />
+        <div className="absolute inset-0 opacity-90 mix-blend-overlay [background-image:radial-gradient(circle,rgba(255,255,255,0.5)_1px,transparent_1px)] [background-size:14px_14px]" />
+        <div className="absolute inset-0 flex items-center justify-center p-8">
+          {study.logo.plate ? (
+            <div className="group-hover:-translate-y-1 rounded-3xl bg-white/95 p-7 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] transition-transform duration-500 sm:p-8">
+              <img
+                src={study.logo.src}
+                alt={study.logo.alt}
+                className="w-full max-w-[9rem] sm:max-w-[10rem]"
+              />
+            </div>
+          ) : (
+            <img
+              src={study.logo.src}
+              alt={study.logo.alt}
+              className="group-hover:-translate-y-1 w-full max-w-[13rem] drop-shadow-[0_12px_28px_rgba(0,0,0,0.3)] transition-transform duration-500 sm:max-w-[15rem]"
+            />
+          )}
+        </div>
+
+        <div className="group-hover:translate-x-0 group-hover:opacity-100 absolute top-4 right-4 flex size-9 -translate-x-1 items-center justify-center rounded-full bg-white/15 text-white opacity-0 backdrop-blur-md transition-all duration-300">
+          <ArrowUpRight className="size-4" />
+        </div>
+      </div>
+    );
+  }
+
+  if (context === "card" && study.screensLayout === "phone" && study.screens?.[0]) {
+    const screen = study.screens[0];
+    return (
+      <div
+        className={cn("relative w-full overflow-hidden", aspect)}
+        style={{ background: GRADIENTS[study.gradient] }}
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.25),transparent_45%)]" />
+        <div className="absolute inset-0 opacity-90 mix-blend-overlay [background-image:radial-gradient(circle,rgba(255,255,255,0.5)_1px,transparent_1px)] [background-size:14px_14px]" />
+        <div className="absolute inset-0 flex items-center justify-center py-6">
+          <img
+            src={screen.src}
+            alt={screen.alt}
+            loading="lazy"
+            className="group-hover:-translate-y-1 h-full w-auto rounded-lg shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] transition-transform duration-500"
+          />
+        </div>
+
+        <div className="group-hover:translate-x-0 group-hover:opacity-100 absolute top-4 right-4 flex size-9 -translate-x-1 items-center justify-center rounded-full bg-white/15 text-white opacity-0 backdrop-blur-md transition-all duration-300">
+          <ArrowUpRight className="size-4" />
+        </div>
+      </div>
+    );
+  }
+
+  if (context === "card" && study.screens?.[0]) {
+    const screen = study.screens[0];
+    return (
+      <div className={cn("relative w-full overflow-hidden bg-black", aspect)}>
+        <img
+          src={screen.src}
+          alt={screen.alt}
+          loading="lazy"
+          className="group-hover:scale-[1.03] absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-black/10" />
+
+        {study.mark && (
+          <img
+            src={study.mark.src}
+            alt=""
+            aria-hidden
+            className="absolute bottom-4 left-4 h-7 w-auto opacity-80 drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]"
+          />
+        )}
+
+        <div className="group-hover:translate-x-0 group-hover:opacity-100 absolute top-4 right-4 flex size-9 -translate-x-1 items-center justify-center rounded-full bg-white/15 text-white opacity-0 backdrop-blur-md transition-all duration-300">
+          <ArrowUpRight className="size-4" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
-      className={cn(
-        "relative overflow-hidden",
-        featured ? "aspect-[16/9]" : "aspect-[4/3]",
-      )}
+      className={cn("relative overflow-hidden", aspect)}
       style={{ background: GRADIENTS[study.gradient] }}
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.25),transparent_45%)]" />
@@ -69,7 +185,7 @@ export function CaseStudyCard({
             featured && "sm:col-span-2",
           )}
         >
-          <CoverArt study={study} featured={featured} />
+          <CoverArt study={study} featured={featured} context="card" />
 
           <div className="flex flex-1 flex-col gap-3 p-5 sm:p-6">
             <div className="flex items-center justify-between text-xs text-muted-foreground">
@@ -93,7 +209,7 @@ export function CaseStudyCard({
                   </span>
                 ))}
               </div>
-              <div className="text-right">
+              <div className="ml-auto text-right">
                 <div className="text-base font-semibold text-foreground">
                   {study.metric.value}
                 </div>
@@ -112,9 +228,9 @@ export function CaseStudyCard({
       >
         <DialogTitle className="sr-only">{study.title}</DialogTitle>
 
-        <CoverArt study={study} featured />
+        <CoverArt study={study} featured context="modal" />
 
-        <div className="flex flex-col gap-6 p-6 sm:p-8">
+        <div className="flex min-w-0 flex-col gap-8 p-6 pt-10 sm:p-8 sm:pt-14">
           <div>
             <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
               <span>{study.category}</span>
@@ -132,7 +248,7 @@ export function CaseStudyCard({
             {study.blurb}
           </p>
 
-          <div className="grid grid-cols-1 gap-4 border-t border-border/70 pt-6 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 border-t border-border/70 pt-20 sm:grid-cols-2">
             {study.details.map((detail) => (
               <div key={detail.label}>
                 <h3 className="text-sm font-semibold tracking-[0.1em] text-muted-foreground uppercase">
@@ -144,6 +260,92 @@ export function CaseStudyCard({
               </div>
             ))}
           </div>
+
+          {study.map && (
+            <div className="flex flex-col gap-3 border-t border-border/70 pt-6">
+              <h3 className="text-sm font-semibold tracking-[0.1em] text-muted-foreground uppercase">
+                Process
+              </h3>
+              <div>
+                <h4 className="text-sm font-semibold text-foreground">
+                  {study.map.title}
+                </h4>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                  {study.map.body}
+                </p>
+              </div>
+              <div className="overflow-x-auto overflow-y-hidden rounded-2xl border border-border/70 bg-white shadow-[0_20px_50px_-25px_rgba(0,0,0,0.5)]">
+                <img
+                  src={study.map.src}
+                  alt={study.map.alt}
+                  loading="lazy"
+                  className="h-auto w-[1400px] max-w-none"
+                />
+              </div>
+            </div>
+          )}
+
+          {study.screens && study.screens.length > 0 && (
+            <div className="flex flex-col gap-5 border-t border-border/70 pt-6">
+              <h3 className="text-sm font-semibold tracking-[0.1em] text-muted-foreground uppercase">
+                Screens
+              </h3>
+
+              {study.screensLayout === "phone" ? (
+                <div className="flex flex-wrap gap-6">
+                  {study.screens.map((screen) => (
+                    <div
+                      key={screen.src}
+                      className="flex w-36 flex-col gap-3 sm:w-40"
+                    >
+                      <div className="overflow-hidden rounded-xl border border-border/70 bg-white shadow-[0_20px_50px_-25px_rgba(0,0,0,0.5)]">
+                        <img
+                          src={screen.src}
+                          alt={screen.alt}
+                          loading="lazy"
+                          className="w-full"
+                        />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-semibold text-foreground">
+                          {screen.title}
+                        </h4>
+                        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                          {screen.body}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                study.screens.map((screen) => (
+                  <div key={screen.src} className="flex flex-col gap-3">
+                    <div className="overflow-hidden rounded-2xl border border-border/70 bg-black shadow-[0_20px_50px_-25px_rgba(0,0,0,0.5)]">
+                      <div className="flex items-center gap-1.5 border-b border-white/10 bg-neutral-900 px-3.5 py-2.5">
+                        <span className="size-2.5 rounded-full bg-white/20" />
+                        <span className="size-2.5 rounded-full bg-white/20" />
+                        <span className="size-2.5 rounded-full bg-white/20" />
+                      </div>
+                      <img
+                        src={screen.src}
+                        alt={screen.alt}
+                        loading="lazy"
+                        className="w-full"
+                      />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-foreground">
+                        {screen.title}
+                      </h4>
+                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                        {screen.body}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
 
           <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border/70 pt-6">
             <div className="flex flex-wrap gap-1.5">

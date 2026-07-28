@@ -2,6 +2,17 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-07-28
+
+- Rebuilt three case study modals with real product work instead of placeholder graphics:
+  - **Climate Pros** — added real WatchTower dashboard and reports screenshots, the WatchTower logo, and the original intelligence-mapping flowchart.
+  - **The Web and Marketing Bureau** — refocused on the Chattic app project, with real app screens, the Chattic logo, and the original application flowchart.
+  - **Belcan** — refocused on the GE Digital Cockpit dashboard, with a before/after look at a color-coded redesign of the shop-floor status cards, and a GE logo watermark.
+- Rewrote the copy on all three to lead with concrete outcomes and real numbers instead of generic bullet points.
+- Fixed a bug where adding a wide image (like a flowchart) to a case study modal could push the whole modal off-screen.
+- Fixed the "quick stat" callout on project cards (e.g. "25+ production stations tracked live") sometimes landing left-aligned instead of lining up on the right like the others.
+- Added more breathing room throughout the case study modals so content doesn't crowd the header image.
+
 ## 2026-07-26 (7)
 
 - Updated the downloadable resume to the latest version.
