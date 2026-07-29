@@ -1,4 +1,5 @@
-import { ArrowUpRight } from "lucide-react";
+import { useState } from "react";
+import { ArrowUpRight, Maximize2 } from "lucide-react";
 import type { CaseStudy } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import {
@@ -7,6 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Lightbox } from "@/components/site/lightbox";
 
 const GRADIENTS: Record<CaseStudy["gradient"], string> = {
   signature:
@@ -34,6 +36,58 @@ function CornerMark({ mark }: { mark?: { src: string; alt: string } }) {
         className="relative h-7 w-auto drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]"
       />
     </div>
+  );
+}
+
+// The expand affordance — a hairline signature-gradient ring (same brand
+// treatment as the site's other marks) around a glass badge. Stays visible
+// (not hover-only) so it reads on touch devices, which have no hover state.
+function ExpandBadge({ className }: { className?: string }) {
+  return (
+    <span
+      aria-hidden
+      className={cn(
+        "gradient-border pointer-events-none absolute rounded-full p-px shadow-[0_4px_16px_-4px_rgba(0,0,0,0.6)] transition-transform duration-300 group-hover/screen:scale-110 group-focus-visible/screen:scale-110",
+        className,
+      )}
+    >
+      <span className="flex size-8 items-center justify-center rounded-full bg-black/70 backdrop-blur-md transition-colors duration-300 group-hover/screen:bg-black/55 sm:size-9">
+        <Maximize2 className="size-3.5 text-white sm:size-4" />
+      </span>
+    </span>
+  );
+}
+
+// A screenshot the user can click/tap to open in the lightbox.
+function ExpandableScreen({
+  screen,
+  onOpen,
+  className,
+  badgeClassName,
+}: {
+  screen: { src: string; alt: string };
+  onOpen: () => void;
+  className?: string;
+  badgeClassName?: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      aria-label={`View ${screen.alt} larger`}
+      className="group/screen relative block w-full cursor-zoom-in text-left"
+    >
+      <img
+        src={screen.src}
+        alt={screen.alt}
+        loading="lazy"
+        className={cn(
+          "transition-[filter] duration-300 group-hover/screen:brightness-90",
+          className,
+        )}
+      />
+      <ExpandBadge className={badgeClassName} />
+    </button>
   );
 }
 
@@ -192,6 +246,20 @@ export function CaseStudyCard({
   study: CaseStudy;
   featured?: boolean;
 }) {
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  // The map/mural (if present) renders before the screens and occupies
+  // lightbox index 0, so every screen's index shifts by one to match.
+  const mapOffset = study.map ? 1 : 0;
+  const lightboxItems = [
+    ...(study.map
+      ? [{ ...study.map, frame: undefined as "phone" | undefined }]
+      : []),
+    ...(study.screens ?? []).map((screen) => ({
+      ...screen,
+      frame: study.screensLayout === "phone" ? ("phone" as const) : undefined,
+    })),
+  ];
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -242,6 +310,17 @@ export function CaseStudyCard({
       <DialogContent
         showCloseButton
         className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-3xl border-border/70 bg-card p-0 sm:max-w-2xl"
+        // The lightbox renders in its own portal outside this dialog's DOM,
+        // so Radix's own outside-click detection (which runs in the
+        // capture phase — nothing inside this component tree can outrun
+        // it) sees every click on the lightbox as a click "outside" this
+        // dialog and reacts to it, eating the click before the lightbox's
+        // own handler gets a clean first try. Telling Radix to ignore
+        // outside interactions while the lightbox is open fixes that at
+        // the source instead of fighting event propagation.
+        onPointerDownOutside={(event) => {
+          if (lightboxIndex !== null) event.preventDefault();
+        }}
       >
         <DialogTitle className="sr-only">{study.title}</DialogTitle>
 
@@ -291,13 +370,23 @@ export function CaseStudyCard({
                   {study.map.body}
                 </p>
               </div>
-              <div className="overflow-x-auto overflow-y-hidden rounded-2xl border border-border/70 bg-white shadow-[0_20px_50px_-25px_rgba(0,0,0,0.5)]">
-                <img
-                  src={study.map.src}
-                  alt={study.map.alt}
-                  loading="lazy"
-                  className="h-auto w-[1400px] max-w-none"
-                />
+              <div className="group/screen relative overflow-hidden rounded-2xl border border-border/70 bg-white shadow-[0_20px_50px_-25px_rgba(0,0,0,0.5)]">
+                <div className="overflow-x-auto overflow-y-hidden">
+                  <img
+                    src={study.map.src}
+                    alt={study.map.alt}
+                    loading="lazy"
+                    className="h-auto w-[1400px] max-w-none"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setLightboxIndex(0)}
+                  aria-label={`View ${study.map.alt} larger`}
+                  className="absolute right-3 bottom-3 cursor-zoom-in"
+                >
+                  <ExpandBadge className="static" />
+                </button>
               </div>
             </div>
           )}
@@ -310,17 +399,17 @@ export function CaseStudyCard({
 
               {study.screensLayout === "phone" ? (
                 <div className="flex flex-wrap gap-6">
-                  {study.screens.map((screen) => (
+                  {study.screens.map((screen, i) => (
                     <div
                       key={screen.src}
                       className="flex w-36 flex-col gap-3 sm:w-40"
                     >
                       <div className="overflow-hidden rounded-xl border border-border/70 bg-white shadow-[0_20px_50px_-25px_rgba(0,0,0,0.5)]">
-                        <img
-                          src={screen.src}
-                          alt={screen.alt}
-                          loading="lazy"
+                        <ExpandableScreen
+                          screen={screen}
+                          onOpen={() => setLightboxIndex(i + mapOffset)}
                           className="w-full"
+                          badgeClassName="right-2 bottom-2"
                         />
                       </div>
                       <div>
@@ -335,7 +424,7 @@ export function CaseStudyCard({
                   ))}
                 </div>
               ) : (
-                study.screens.map((screen) => (
+                study.screens.map((screen, i) => (
                   <div key={screen.src} className="flex flex-col gap-3">
                     <div className="overflow-hidden rounded-2xl border border-border/70 bg-black shadow-[0_20px_50px_-25px_rgba(0,0,0,0.5)]">
                       <div className="flex items-center gap-1.5 border-b border-white/10 bg-neutral-900 px-3.5 py-2.5">
@@ -343,11 +432,11 @@ export function CaseStudyCard({
                         <span className="size-2.5 rounded-full bg-white/20" />
                         <span className="size-2.5 rounded-full bg-white/20" />
                       </div>
-                      <img
-                        src={screen.src}
-                        alt={screen.alt}
-                        loading="lazy"
+                      <ExpandableScreen
+                        screen={screen}
+                        onOpen={() => setLightboxIndex(i + mapOffset)}
                         className="w-full"
+                        badgeClassName="right-3 bottom-3"
                       />
                     </div>
                     <div>
@@ -386,6 +475,15 @@ export function CaseStudyCard({
           </div>
         </div>
       </DialogContent>
+
+      {lightboxItems.length > 0 && (
+        <Lightbox
+          items={lightboxItems}
+          index={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+          onNavigate={setLightboxIndex}
+        />
+      )}
     </Dialog>
   );
 }

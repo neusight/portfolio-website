@@ -2,6 +2,12 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-07-29
+
+- Added a premium lightbox for case study screenshots: click or tap any screen (or the process/mural diagram) inside a case study to bring it up full-screen with smooth open/close animation, swipe-to-dismiss on mobile, and gradient-styled navigation controls that match the site's brand look. Works consistently across every case study, including the Chattic app screens.
+- Added a visible "expand" badge on every screenshot so it's clear at a glance that it can be tapped to enlarge, on both desktop and mobile.
+- Fixed the lightbox's close button needing two clicks to actually close — it inherited a "clicks do nothing" style from the case study modal underneath while that modal was open, so the very first click silently did nothing.
+
 ## 2026-07-28 (2)
 
 - Added six new Kroger case studies, each with real product screens and its own custom banner mark:
