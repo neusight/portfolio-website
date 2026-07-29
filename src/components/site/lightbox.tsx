@@ -209,6 +209,7 @@ export function Lightbox({
   useMotionValueEvent(zoomScale, "change", (value) => setIsZoomed(value > 1.01));
 
   const imgRef = useRef<HTMLImageElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const pointersRef = useRef(new Map<number, { x: number; y: number }>());
   const gestureModeRef = useRef<"idle" | "pinch" | "pan" | "dismiss">("idle");
   const gestureStartRef = useRef({
@@ -233,6 +234,31 @@ export function Lightbox({
     animate(entranceScale, open ? 1 : 0.96, { duration: 0.22, ease: EASE });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
+
+  // `touch-action: none` alone doesn't reliably stop iOS Safari's native
+  // pinch-zoom-the-page gesture — Safari's multi-touch gesture recognizer
+  // can still partially engage, especially when a pinch's second finger
+  // lands outside the (often narrow) image and onto the surrounding
+  // backdrop. Because the case study modal underneath is `position: fixed`
+  // (pinned to the layout viewport, not the visual one), letting that
+  // native zoom engage at all could leave the modal appearing scrolled up
+  // once the lightbox closed. A real, non-passive `touchmove` listener
+  // that preventDefaults on any multi-touch move is the standard, more
+  // reliable cross-browser fix — React's synthetic pointer events don't
+  // give the browser this signal early enough for Safari to honor it.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const blockPinch = (event: TouchEvent) => {
+      if (event.touches.length > 1) event.preventDefault();
+    };
+    el.addEventListener("touchstart", blockPinch, { passive: false });
+    el.addEventListener("touchmove", blockPinch, { passive: false });
+    return () => {
+      el.removeEventListener("touchstart", blockPinch);
+      el.removeEventListener("touchmove", blockPinch);
+    };
+  }, []);
 
   // Reset zoom whenever the visible image changes, or the lightbox
   // opens/closes — otherwise a zoomed-in screenshot would stay zoomed when
@@ -471,6 +497,7 @@ export function Lightbox({
 
   return createPortal(
     <div
+      ref={containerRef}
       className={cn(
         "fixed inset-0 z-[70] flex items-center justify-center p-2 transition-opacity sm:p-6",
         // The Radix dialog underneath sets `pointer-events: none` directly

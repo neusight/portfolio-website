@@ -2,6 +2,10 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-07-29 (6)
+
+- Fixed the real cause of the case study modal's close button disappearing after viewing a screenshot: the X was scrolling away along with the modal's own content instead of staying pinned to the corner, so it became unreachable any time you'd scrolled more than a couple screens down (which is exactly what happens on the way to a screenshot deep in a case study). It now stays put regardless of scroll position.
+
 ## 2026-07-29 (5)
 
 - Fixed a mobile-only bug where, after pinch-zooming a screenshot and closing the lightbox, the case study modal underneath could reappear scrolled up too far, hiding its close button. A pinch gesture starting near a screenshot's edge could partially trigger the phone browser's own native page-zoom alongside the lightbox's zoom, leaving things shifted once it closed — the whole lightbox now blocks that native gesture, not just the image itself.

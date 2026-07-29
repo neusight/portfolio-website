@@ -309,7 +309,17 @@ export function CaseStudyCard({
 
       <DialogContent
         showCloseButton
-        className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-3xl border-border/70 bg-card p-0 sm:max-w-2xl"
+        // The close button is rendered by DialogContent itself as an
+        // absolutely-positioned sibling of these children — if THIS element
+        // were also the scrolling container (as it used to be, via
+        // max-h/overflow-y-auto here), the X scrolls away with the content
+        // instead of staying pinned to the dialog's corner, becoming
+        // unreachable once scrolled more than a couple screens down (it's
+        // positioned relative to the scrolled content's own box, not the
+        // viewport). The actual scrolling now happens on the inner wrapper
+        // below instead, so DialogContent's own box — and the X anchored to
+        // it — never moves.
+        className="w-full max-w-2xl overflow-hidden rounded-3xl border-border/70 bg-card p-0 sm:max-w-2xl"
         // The lightbox renders in its own portal outside this dialog's DOM,
         // so Radix's own outside-click detection (which runs in the
         // capture phase — nothing inside this component tree can outrun
@@ -324,92 +334,120 @@ export function CaseStudyCard({
       >
         <DialogTitle className="sr-only">{study.title}</DialogTitle>
 
-        <CoverArt study={study} featured context="modal" />
+        <div className="max-h-[85vh] min-w-0 overflow-y-auto">
+          <CoverArt study={study} featured context="modal" />
 
-        <div className="flex min-w-0 flex-col gap-8 p-6 pt-10 sm:p-8 sm:pt-14">
-          <div>
-            <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
-              <span>{study.category}</span>
-              <span>{study.year}</span>
+          <div className="flex min-w-0 flex-col gap-8 p-6 pt-10 sm:p-8 sm:pt-14">
+            <div>
+              <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
+                <span>{study.category}</span>
+                <span>{study.year}</span>
+              </div>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
+                {study.title}
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {study.client} · {study.role}
+              </p>
             </div>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
-              {study.title}
-            </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {study.client} · {study.role}
+
+            <p className="text-sm leading-relaxed text-foreground/90">
+              {study.blurb}
             </p>
-          </div>
 
-          <p className="text-sm leading-relaxed text-foreground/90">
-            {study.blurb}
-          </p>
-
-          <div className="grid grid-cols-1 gap-4 border-t border-border/70 pt-20 sm:grid-cols-2">
-            {study.details.map((detail) => (
-              <div key={detail.label}>
-                <h3 className="text-sm font-semibold tracking-[0.1em] text-muted-foreground uppercase">
-                  {detail.label}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-foreground/90">
-                  {detail.body}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          {study.map && (
-            <div className="flex flex-col gap-3 border-t border-border/70 pt-6">
-              <h3 className="text-sm font-semibold tracking-[0.1em] text-muted-foreground uppercase">
-                Process
-              </h3>
-              <div>
-                <h4 className="text-sm font-semibold text-foreground">
-                  {study.map.title}
-                </h4>
-                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                  {study.map.body}
-                </p>
-              </div>
-              <div className="group/screen relative overflow-hidden rounded-2xl border border-border/70 bg-white shadow-[0_20px_50px_-25px_rgba(0,0,0,0.5)]">
-                <div className="overflow-x-auto overflow-y-hidden">
-                  <img
-                    src={study.map.src}
-                    alt={study.map.alt}
-                    loading="lazy"
-                    className="h-auto w-[1400px] max-w-none"
-                  />
+            <div className="grid grid-cols-1 gap-4 border-t border-border/70 pt-20 sm:grid-cols-2">
+              {study.details.map((detail) => (
+                <div key={detail.label}>
+                  <h3 className="text-sm font-semibold tracking-[0.1em] text-muted-foreground uppercase">
+                    {detail.label}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-foreground/90">
+                    {detail.body}
+                  </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setLightboxIndex(0)}
-                  aria-label={`View ${study.map.alt} larger`}
-                  className="absolute right-3 bottom-3 cursor-zoom-in"
-                >
-                  <ExpandBadge className="static" />
-                </button>
-              </div>
+              ))}
             </div>
-          )}
 
-          {study.screens && study.screens.length > 0 && (
-            <div className="flex flex-col gap-5 border-t border-border/70 pt-6">
-              <h3 className="text-sm font-semibold tracking-[0.1em] text-muted-foreground uppercase">
-                Screens
-              </h3>
+            {study.map && (
+              <div className="flex flex-col gap-3 border-t border-border/70 pt-6">
+                <h3 className="text-sm font-semibold tracking-[0.1em] text-muted-foreground uppercase">
+                  Process
+                </h3>
+                <div>
+                  <h4 className="text-sm font-semibold text-foreground">
+                    {study.map.title}
+                  </h4>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                    {study.map.body}
+                  </p>
+                </div>
+                <div className="group/screen relative overflow-hidden rounded-2xl border border-border/70 bg-white shadow-[0_20px_50px_-25px_rgba(0,0,0,0.5)]">
+                  <div className="overflow-x-auto overflow-y-hidden">
+                    <img
+                      src={study.map.src}
+                      alt={study.map.alt}
+                      loading="lazy"
+                      className="h-auto w-[1400px] max-w-none"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setLightboxIndex(0)}
+                    aria-label={`View ${study.map.alt} larger`}
+                    className="absolute right-3 bottom-3 cursor-zoom-in"
+                  >
+                    <ExpandBadge className="static" />
+                  </button>
+                </div>
+              </div>
+            )}
 
-              {study.screensLayout === "phone" ? (
-                <div className="flex flex-wrap gap-6">
-                  {study.screens.map((screen, i) => (
-                    <div
-                      key={screen.src}
-                      className="flex w-36 flex-col gap-3 sm:w-40"
-                    >
-                      <div className="overflow-hidden rounded-xl border border-border/70 bg-white shadow-[0_20px_50px_-25px_rgba(0,0,0,0.5)]">
+            {study.screens && study.screens.length > 0 && (
+              <div className="flex flex-col gap-5 border-t border-border/70 pt-6">
+                <h3 className="text-sm font-semibold tracking-[0.1em] text-muted-foreground uppercase">
+                  Screens
+                </h3>
+
+                {study.screensLayout === "phone" ? (
+                  <div className="flex flex-wrap gap-6">
+                    {study.screens.map((screen, i) => (
+                      <div
+                        key={screen.src}
+                        className="flex w-36 flex-col gap-3 sm:w-40"
+                      >
+                        <div className="overflow-hidden rounded-xl border border-border/70 bg-white shadow-[0_20px_50px_-25px_rgba(0,0,0,0.5)]">
+                          <ExpandableScreen
+                            screen={screen}
+                            onOpen={() => setLightboxIndex(i + mapOffset)}
+                            className="w-full"
+                            badgeClassName="right-2 bottom-2"
+                          />
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-semibold text-foreground">
+                            {screen.title}
+                          </h4>
+                          <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                            {screen.body}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  study.screens.map((screen, i) => (
+                    <div key={screen.src} className="flex flex-col gap-3">
+                      <div className="overflow-hidden rounded-2xl border border-border/70 bg-black shadow-[0_20px_50px_-25px_rgba(0,0,0,0.5)]">
+                        <div className="flex items-center gap-1.5 border-b border-white/10 bg-neutral-900 px-3.5 py-2.5">
+                          <span className="size-2.5 rounded-full bg-white/20" />
+                          <span className="size-2.5 rounded-full bg-white/20" />
+                          <span className="size-2.5 rounded-full bg-white/20" />
+                        </div>
                         <ExpandableScreen
                           screen={screen}
                           onOpen={() => setLightboxIndex(i + mapOffset)}
                           className="w-full"
-                          badgeClassName="right-2 bottom-2"
+                          badgeClassName="right-3 bottom-3"
                         />
                       </div>
                       <div>
@@ -421,55 +459,29 @@ export function CaseStudyCard({
                         </p>
                       </div>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                study.screens.map((screen, i) => (
-                  <div key={screen.src} className="flex flex-col gap-3">
-                    <div className="overflow-hidden rounded-2xl border border-border/70 bg-black shadow-[0_20px_50px_-25px_rgba(0,0,0,0.5)]">
-                      <div className="flex items-center gap-1.5 border-b border-white/10 bg-neutral-900 px-3.5 py-2.5">
-                        <span className="size-2.5 rounded-full bg-white/20" />
-                        <span className="size-2.5 rounded-full bg-white/20" />
-                        <span className="size-2.5 rounded-full bg-white/20" />
-                      </div>
-                      <ExpandableScreen
-                        screen={screen}
-                        onOpen={() => setLightboxIndex(i + mapOffset)}
-                        className="w-full"
-                        badgeClassName="right-3 bottom-3"
-                      />
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-foreground">
-                        {screen.title}
-                      </h4>
-                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                        {screen.body}
-                      </p>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          )}
-
-          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border/70 pt-6">
-            <div className="flex flex-wrap gap-1.5">
-              {study.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border-gradient-card px-2.5 py-1 text-xs text-muted-foreground"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <div className="text-right">
-              <div className="text-base font-semibold text-foreground">
-                {study.metric.value}
+                  ))
+                )}
               </div>
-              <div className="text-xs text-muted-foreground">
-                {study.metric.label}
+            )}
+
+            <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border/70 pt-6">
+              <div className="flex flex-wrap gap-1.5">
+                {study.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border-gradient-card px-2.5 py-1 text-xs text-muted-foreground"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <div className="text-right">
+                <div className="text-base font-semibold text-foreground">
+                  {study.metric.value}
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  {study.metric.label}
+                </div>
               </div>
             </div>
           </div>
