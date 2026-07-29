@@ -2,6 +2,10 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-07-29 (5)
+
+- Fixed a mobile-only bug where, after pinch-zooming a screenshot and closing the lightbox, the case study modal underneath could reappear scrolled up too far, hiding its close button. A pinch gesture starting near a screenshot's edge could partially trigger the phone browser's own native page-zoom alongside the lightbox's zoom, leaving things shifted once it closed — the whole lightbox now blocks that native gesture, not just the image itself.
+
 ## 2026-07-29 (4)
 
 - Fixed lightbox zoom capping out at the same blurry size regardless of how far a user zoomed in. Each screenshot now zooms up to a level based on its own actual resolution, so high-res screenshots zoom in generously and stay crisp, and the handful of lower-resolution ones stop at the point where they'd otherwise turn to visible mush instead of continuing to zoom into blur.

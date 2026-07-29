@@ -483,7 +483,7 @@ export function Lightbox({
         // land seemingly at random.
         open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
       )}
-      style={{ transitionDuration: `${CLOSE_ANIMATION_MS}ms` }}
+      style={{ transitionDuration: `${CLOSE_ANIMATION_MS}ms`, touchAction: "none" }}
       role="dialog"
       aria-modal="true"
       aria-label={item.title}
