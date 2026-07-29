@@ -1,13 +1,38 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+  type ReactNode,
+} from "react";
 import { createPortal } from "react-dom";
-import { motion, useMotionValue, useTransform } from "motion/react";
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useMotionValueEvent,
+  useTransform,
+} from "motion/react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const CLOSE_ANIMATION_MS = 220;
+
+// Pinch-to-zoom / double-tap-to-zoom tuning. Screenshots are captured at
+// phone resolution, so a generous max zoom actually helps legibility instead
+// of just showing pixelation.
+const MAX_ZOOM = 4;
+const DOUBLE_TAP_ZOOM = 2.5;
+const DOUBLE_TAP_MAX_DELAY_MS = 300;
+const DOUBLE_TAP_MAX_DIST_PX = 40;
+const TAP_MAX_DURATION_MS = 250;
+const TAP_MAX_MOVEMENT_PX = 10;
+const DISMISS_CLOSE_OFFSET_PX = 120;
+const DISMISS_CLOSE_VELOCITY_PXS = 600;
+const ZOOM_SPRING = { type: "spring", stiffness: 400, damping: 35 } as const;
 
 export type LightboxItem = {
   src: string;
@@ -133,6 +158,266 @@ export function Lightbox({
   const dragY = useMotionValue(0);
   const backdropOpacity = useTransform(dragY, [-220, 0, 220], [0.35, 1, 0.35]);
 
+  // Pinch-zoom / pan / double-tap state. These live at the Lightbox level
+  // (not on the image itself) because dismiss-swipe (dragY, above) and
+  // zoom/pan need to share one pointer gesture pipeline: a single-finger
+  // drag means "swipe to dismiss" when the image is at 1x, but "pan around"
+  // once the user has zoomed in.
+  const zoomScale = useMotionValue(1);
+  const panX = useMotionValue(0);
+  const panY = useMotionValue(0);
+  const entranceScale = useMotionValue(0.94);
+  // Kept as a separate motion value multiplied into the final scale, rather
+  // than driving `scale` directly via the `animate` prop, so the mount/exit
+  // "pop" transition never fights with live pinch-zoom updates.
+  const displayScale = useTransform([entranceScale, zoomScale], (latest) => {
+    const [entrance, zoom] = latest as number[];
+    return entrance * zoom;
+  });
+  const combinedY = useTransform([dragY, panY], (latest) => {
+    const [dismiss, pan] = latest as number[];
+    return dismiss + pan;
+  });
+
+  const [isZoomed, setIsZoomed] = useState(false);
+  useMotionValueEvent(zoomScale, "change", (value) => setIsZoomed(value > 1.01));
+
+  const imgRef = useRef<HTMLImageElement>(null);
+  const pointersRef = useRef(new Map<number, { x: number; y: number }>());
+  const gestureModeRef = useRef<"idle" | "pinch" | "pan" | "dismiss">("idle");
+  const gestureStartRef = useRef({
+    scale: 1,
+    panX: 0,
+    panY: 0,
+    dist: 0,
+    mid: { x: 0, y: 0 },
+    pointer: { x: 0, y: 0 },
+  });
+  const baseSizeRef = useRef<{ width: number; height: number } | null>(null);
+  const tapStartRef = useRef<{ time: number; point: { x: number; y: number } } | null>(
+    null,
+  );
+  const lastTapRef = useRef<{ time: number; point: { x: number; y: number } } | null>(
+    null,
+  );
+  const lastMoveRef = useRef<{ time: number; y: number } | null>(null);
+
+  useEffect(() => {
+    animate(entranceScale, open ? 1 : 0.96, { duration: 0.22, ease: EASE });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
+  // Reset zoom whenever the visible image changes, or the lightbox
+  // opens/closes — otherwise a zoomed-in screenshot would stay zoomed when
+  // navigating to the next one, or shrink from 2.5x instead of 1x on close.
+  useEffect(() => {
+    zoomScale.set(1);
+    panX.set(0);
+    panY.set(0);
+    baseSizeRef.current = null;
+    pointersRef.current.clear();
+    gestureModeRef.current = "idle";
+    tapStartRef.current = null;
+    lastTapRef.current = null;
+    setIsZoomed(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index, open]);
+
+  // getBoundingClientRect() returns the *painted* (post-transform) box, so
+  // it's only accurate to derive the image's unscaled footprint the first
+  // time a gesture starts (when zoomScale is still ~1). Cached per image so
+  // later pinch/pan events can keep using it as zoomScale changes.
+  function getBaseSize() {
+    if (baseSizeRef.current) return baseSizeRef.current;
+    const el = imgRef.current;
+    if (!el) return null;
+    const rect = el.getBoundingClientRect();
+    const scale = zoomScale.get() || 1;
+    const size = { width: rect.width / scale, height: rect.height / scale };
+    baseSizeRef.current = size;
+    return size;
+  }
+
+  function clampPan(value: number, scale: number, axis: "x" | "y") {
+    const base = getBaseSize();
+    if (!base) return value;
+    const size = axis === "x" ? base.width : base.height;
+    const max = Math.max(0, (size * (scale - 1)) / 2);
+    return Math.min(max, Math.max(-max, value));
+  }
+
+  function resetZoom() {
+    animate(zoomScale, 1, ZOOM_SPRING);
+    animate(panX, 0, ZOOM_SPRING);
+    animate(panY, 0, ZOOM_SPRING);
+  }
+
+  function toggleZoom(point: { x: number; y: number }) {
+    const el = imgRef.current;
+    if (!el) return;
+    if (zoomScale.get() > 1.01) {
+      resetZoom();
+      return;
+    }
+    const rect = el.getBoundingClientRect();
+    const dx = point.x - (rect.left + rect.width / 2);
+    const dy = point.y - (rect.top + rect.height / 2);
+    // Keep the tapped point stationary on screen as the image scales up
+    // around its own center: target offset = distance-from-center * (1 - scale).
+    const targetX = clampPan(dx * (1 - DOUBLE_TAP_ZOOM), DOUBLE_TAP_ZOOM, "x");
+    const targetY = clampPan(dy * (1 - DOUBLE_TAP_ZOOM), DOUBLE_TAP_ZOOM, "y");
+    const springIn = { type: "spring", stiffness: 300, damping: 30 } as const;
+    animate(zoomScale, DOUBLE_TAP_ZOOM, springIn);
+    animate(panX, targetX, springIn);
+    animate(panY, targetY, springIn);
+  }
+
+  function handlePointerDown(e: ReactPointerEvent<HTMLImageElement>) {
+    imgRef.current?.setPointerCapture(e.pointerId);
+    pointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    tapStartRef.current = { time: Date.now(), point: { x: e.clientX, y: e.clientY } };
+
+    const pts = Array.from(pointersRef.current.values());
+    if (pts.length === 2) {
+      const [a, b] = pts;
+      gestureModeRef.current = "pinch";
+      gestureStartRef.current = {
+        scale: zoomScale.get(),
+        panX: panX.get(),
+        panY: panY.get(),
+        dist: Math.hypot(a.x - b.x, a.y - b.y),
+        mid: { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 },
+        pointer: pts[0],
+      };
+    } else if (pts.length === 1) {
+      gestureModeRef.current = zoomScale.get() > 1.01 ? "pan" : "dismiss";
+      gestureStartRef.current = {
+        scale: zoomScale.get(),
+        panX: panX.get(),
+        panY: panY.get(),
+        dist: 0,
+        mid: { x: 0, y: 0 },
+        pointer: pts[0],
+      };
+      lastMoveRef.current = { time: Date.now(), y: pts[0].y };
+    }
+  }
+
+  function handlePointerMove(e: ReactPointerEvent<HTMLImageElement>) {
+    if (!pointersRef.current.has(e.pointerId)) return;
+    pointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    const pts = Array.from(pointersRef.current.values());
+    const start = gestureStartRef.current;
+    const mode = gestureModeRef.current;
+
+    if (mode === "pinch" && pts.length === 2) {
+      e.preventDefault();
+      const [a, b] = pts;
+      const dist = Math.hypot(a.x - b.x, a.y - b.y);
+      const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+      const nextScale = Math.min(
+        MAX_ZOOM,
+        Math.max(1, start.scale * (dist / (start.dist || dist))),
+      );
+      zoomScale.set(nextScale);
+      panX.set(clampPan(start.panX + (mid.x - start.mid.x), nextScale, "x"));
+      panY.set(clampPan(start.panY + (mid.y - start.mid.y), nextScale, "y"));
+    } else if (mode === "pan" && pts.length === 1) {
+      e.preventDefault();
+      const dx = pts[0].x - start.pointer.x;
+      const dy = pts[0].y - start.pointer.y;
+      const scale = zoomScale.get();
+      panX.set(clampPan(start.panX + dx, scale, "x"));
+      panY.set(clampPan(start.panY + dy, scale, "y"));
+    } else if (mode === "dismiss" && pts.length === 1) {
+      const dy = pts[0].y - start.pointer.y;
+      dragY.set(dy * 0.8);
+      lastMoveRef.current = { time: Date.now(), y: pts[0].y };
+    }
+
+    if (tapStartRef.current) {
+      const moved = Math.hypot(
+        e.clientX - tapStartRef.current.point.x,
+        e.clientY - tapStartRef.current.point.y,
+      );
+      if (moved > TAP_MAX_MOVEMENT_PX) tapStartRef.current = null;
+    }
+  }
+
+  function handlePointerUp(e: ReactPointerEvent<HTMLImageElement>) {
+    const wasMode = gestureModeRef.current;
+    const wasSingle = pointersRef.current.size === 1;
+    pointersRef.current.delete(e.pointerId);
+    const remaining = pointersRef.current.size;
+
+    if (wasMode === "dismiss" && remaining === 0) {
+      const finalY = dragY.get();
+      let velocity = 0;
+      if (lastMoveRef.current) {
+        const dt = Date.now() - lastMoveRef.current.time;
+        if (dt > 0) velocity = ((e.clientY - lastMoveRef.current.y) / dt) * 1000;
+      }
+      if (
+        Math.abs(finalY) > DISMISS_CLOSE_OFFSET_PX ||
+        Math.abs(velocity) > DISMISS_CLOSE_VELOCITY_PXS
+      ) {
+        onClose();
+      } else {
+        animate(dragY, 0, { type: "spring", stiffness: 500, damping: 40 });
+      }
+    }
+
+    if ((wasMode === "pinch" || wasMode === "pan") && remaining === 1) {
+      // One finger lifted off a pinch — keep going as a single-finger pan
+      // instead of snapping back, so the gesture feels continuous.
+      gestureModeRef.current = "pan";
+      const remainingPointer = Array.from(pointersRef.current.values())[0];
+      gestureStartRef.current = {
+        scale: zoomScale.get(),
+        panX: panX.get(),
+        panY: panY.get(),
+        dist: 0,
+        mid: { x: 0, y: 0 },
+        pointer: remainingPointer,
+      };
+    } else if (remaining === 0) {
+      if ((wasMode === "pinch" || wasMode === "pan") && zoomScale.get() < 1.02) {
+        resetZoom();
+      }
+      gestureModeRef.current = "idle";
+
+      if (wasSingle && tapStartRef.current) {
+        const duration = Date.now() - tapStartRef.current.time;
+        const tapPoint = tapStartRef.current.point;
+        if (duration < TAP_MAX_DURATION_MS) {
+          const last = lastTapRef.current;
+          if (
+            last &&
+            Date.now() - last.time < DOUBLE_TAP_MAX_DELAY_MS &&
+            Math.hypot(tapPoint.x - last.point.x, tapPoint.y - last.point.y) <
+              DOUBLE_TAP_MAX_DIST_PX
+          ) {
+            lastTapRef.current = null;
+            toggleZoom(tapPoint);
+          } else {
+            lastTapRef.current = { time: Date.now(), point: tapPoint };
+          }
+        }
+      }
+    }
+    tapStartRef.current = null;
+  }
+
+  function handlePointerCancel(e: ReactPointerEvent<HTMLImageElement>) {
+    pointersRef.current.delete(e.pointerId);
+    tapStartRef.current = null;
+    if (pointersRef.current.size === 0) {
+      gestureModeRef.current = "idle";
+      if (zoomScale.get() < 1.02) resetZoom();
+      animate(dragY, 0, { type: "spring", stiffness: 500, damping: 40 });
+    }
+  }
+
   if (!mounted || !rendered) return null;
 
   const item = lastItem.current;
@@ -208,22 +493,21 @@ export function Lightbox({
 
       <motion.img
         key={item.src}
+        ref={imgRef}
         src={item.src}
         alt={item.alt}
-        initial={{ opacity: 0, scale: 0.94 }}
-        animate={{ opacity: open ? 1 : 0, scale: open ? 1 : 0.96 }}
+        draggable={false}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: open ? 1 : 0 }}
         transition={{ duration: 0.22, ease: EASE }}
-        drag="y"
-        style={{ y: dragY }}
-        dragConstraints={{ top: 0, bottom: 0 }}
-        dragElastic={0.6}
-        onDragEnd={(_, info) => {
-          if (Math.abs(info.offset.y) > 120 || Math.abs(info.velocity.y) > 600) {
-            onClose();
-          }
-        }}
+        style={{ x: panX, y: combinedY, scale: displayScale, touchAction: "none" }}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerCancel}
         className={cn(
           "relative z-[5] object-contain shadow-[0_30px_100px_-20px_rgba(0,0,0,0.8)] ring-1 ring-white/10",
+          isZoomed ? "cursor-grab active:cursor-grabbing" : "cursor-zoom-in",
           item.frame === "phone"
             ? "max-h-[70vh] max-w-[300px] rounded-[2.25rem] sm:max-w-[340px]"
             : "max-h-[95vh] max-w-[95vw] rounded-lg sm:rounded-xl",

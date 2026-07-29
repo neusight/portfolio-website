@@ -2,6 +2,10 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-07-29 (2)
+
+- Added pinch-to-zoom and double-tap-to-zoom to the screenshot lightbox, so screenshots that read small on a phone can actually be zoomed in and panned around instead of staying stuck at their small on-screen size. Swiping down to dismiss still works exactly as before when not zoomed in.
+
 ## 2026-07-29
 
 - Added a premium lightbox for case study screenshots: click or tap any screen (or the process/mural diagram) inside a case study to bring it up full-screen with smooth open/close animation, swipe-to-dismiss on mobile, and gradient-styled navigation controls that match the site's brand look. Works consistently across every case study, including the Chattic app screens.
