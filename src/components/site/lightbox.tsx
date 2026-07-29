@@ -26,6 +26,14 @@ const CLOSE_ANIMATION_MS = 220;
 // of just showing pixelation.
 const MAX_ZOOM = 4;
 const DOUBLE_TAP_ZOOM = 2.5;
+// However high-res a screenshot is, zooming past its native pixel density
+// just upsamples it — never actually shows more detail, only a softer,
+// blurrier version of what's already visible. Every image gets capped at
+// (roughly) its own native-resolution ceiling instead of one flat max, so
+// zoom never invites the user into a blurry dead end; it just stops where
+// real clarity does. This floor keeps the gesture from feeling disabled on
+// the handful of screens whose source files are natively small.
+const MIN_USEFUL_ZOOM = 1.4;
 const DOUBLE_TAP_MAX_DELAY_MS = 300;
 const DOUBLE_TAP_MAX_DIST_PX = 40;
 const TAP_MAX_DURATION_MS = 250;
@@ -212,6 +220,7 @@ export function Lightbox({
     pointer: { x: 0, y: 0 },
   });
   const baseSizeRef = useRef<{ width: number; height: number } | null>(null);
+  const maxScaleRef = useRef<number | null>(null);
   const tapStartRef = useRef<{ time: number; point: { x: number; y: number } } | null>(
     null,
   );
@@ -234,6 +243,7 @@ export function Lightbox({
     panY.set(0);
     dragY.set(0);
     baseSizeRef.current = null;
+    maxScaleRef.current = null;
     pointersRef.current.clear();
     gestureModeRef.current = "idle";
     tapStartRef.current = null;
@@ -254,7 +264,22 @@ export function Lightbox({
     const scale = zoomScale.get() || 1;
     const size = { width: rect.width / scale, height: rect.height / scale };
     baseSizeRef.current = size;
+
+    // Cap zoom at (roughly) the point where displayed pixels catch up with
+    // the source file's actual pixel count — past that, scale is just
+    // upsampling. Computed per image since screenshot resolutions vary a
+    // lot across case studies.
+    const dpr = window.devicePixelRatio || 1;
+    const nativeWidth = el.naturalWidth || size.width * dpr;
+    const idealMax = nativeWidth / (size.width * dpr);
+    maxScaleRef.current = Math.min(MAX_ZOOM, Math.max(MIN_USEFUL_ZOOM, idealMax));
+
     return size;
+  }
+
+  function getMaxZoom() {
+    getBaseSize();
+    return maxScaleRef.current ?? MAX_ZOOM;
   }
 
   function clampPan(value: number, scale: number, axis: "x" | "y") {
@@ -281,12 +306,13 @@ export function Lightbox({
     const rect = el.getBoundingClientRect();
     const dx = point.x - (rect.left + rect.width / 2);
     const dy = point.y - (rect.top + rect.height / 2);
+    const targetScale = Math.min(DOUBLE_TAP_ZOOM, getMaxZoom());
     // Keep the tapped point stationary on screen as the image scales up
     // around its own center: target offset = distance-from-center * (1 - scale).
-    const targetX = clampPan(dx * (1 - DOUBLE_TAP_ZOOM), DOUBLE_TAP_ZOOM, "x");
-    const targetY = clampPan(dy * (1 - DOUBLE_TAP_ZOOM), DOUBLE_TAP_ZOOM, "y");
+    const targetX = clampPan(dx * (1 - targetScale), targetScale, "x");
+    const targetY = clampPan(dy * (1 - targetScale), targetScale, "y");
     const springIn = { type: "spring", stiffness: 300, damping: 30 } as const;
-    animate(zoomScale, DOUBLE_TAP_ZOOM, springIn);
+    animate(zoomScale, targetScale, springIn);
     animate(panX, targetX, springIn);
     animate(panY, targetY, springIn);
   }
@@ -335,7 +361,7 @@ export function Lightbox({
       const dist = Math.hypot(a.x - b.x, a.y - b.y);
       const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
       const nextScale = Math.min(
-        MAX_ZOOM,
+        getMaxZoom(),
         Math.max(1, start.scale * (dist / (start.dist || dist))),
       );
       zoomScale.set(nextScale);

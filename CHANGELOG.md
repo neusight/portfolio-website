@@ -2,6 +2,10 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-07-29 (4)
+
+- Fixed lightbox zoom capping out at the same blurry size regardless of how far a user zoomed in. Each screenshot now zooms up to a level based on its own actual resolution, so high-res screenshots zoom in generously and stay crisp, and the handful of lower-resolution ones stop at the point where they'd otherwise turn to visible mush instead of continuing to zoom into blur.
+
 ## 2026-07-29 (3)
 
 - Fixed a bug in the screenshot lightbox where a screenshot could open pushed down toward the bottom of the screen instead of centered — happened after swiping down to dismiss a previous screenshot, which left it primed to throw off the next one's position.
