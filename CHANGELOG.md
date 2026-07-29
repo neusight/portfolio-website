@@ -2,6 +2,11 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-07-29 (3)
+
+- Fixed a bug in the screenshot lightbox where a screenshot could open pushed down toward the bottom of the screen instead of centered — happened after swiping down to dismiss a previous screenshot, which left it primed to throw off the next one's position.
+- Fixed the lightbox's prev/next arrows sometimes skipping past a screenshot instead of stepping to the very next one.
+
 ## 2026-07-29 (2)
 
 - Added pinch-to-zoom and double-tap-to-zoom to the screenshot lightbox, so screenshots that read small on a phone can actually be zoomed in and panned around instead of staying stuck at their small on-screen size. Swiping down to dismiss still works exactly as before when not zoomed in.

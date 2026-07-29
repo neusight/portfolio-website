@@ -53,6 +53,13 @@ export type LightboxItem = {
 // trapped dialog) — the click needs a second press to actually register.
 // Firing on pointerdown instead of click runs before that correction, so a
 // single press works everywhere, including touch.
+//
+// onClick is *also* wired up — but only as a fallback for keyboard
+// activation (Enter/Space), which fires a click with no preceding
+// pointerdown. For an actual pointer press both events fire for the same
+// interaction, so onClick has to know the pointerdown already handled it
+// and skip — otherwise every mouse/touch press called onActivate twice
+// (e.g. navigating by 2 screenshots instead of 1 on a single arrow tap).
 function LightboxButton({
   onActivate,
   ariaLabel,
@@ -66,11 +73,22 @@ function LightboxButton({
   size?: string;
   children: ReactNode;
 }) {
+  const handledByPointerRef = useRef(false);
+
   return (
     <button
       type="button"
-      onPointerDown={onActivate}
-      onClick={onActivate}
+      onPointerDown={() => {
+        handledByPointerRef.current = true;
+        onActivate();
+      }}
+      onClick={() => {
+        if (handledByPointerRef.current) {
+          handledByPointerRef.current = false;
+          return;
+        }
+        onActivate();
+      }}
       aria-label={ariaLabel}
       className={cn(
         "gradient-border absolute z-20 rounded-full p-px shadow-[0_4px_16px_-4px_rgba(0,0,0,0.6)]",
@@ -214,6 +232,7 @@ export function Lightbox({
     zoomScale.set(1);
     panX.set(0);
     panY.set(0);
+    dragY.set(0);
     baseSizeRef.current = null;
     pointersRef.current.clear();
     gestureModeRef.current = "idle";
