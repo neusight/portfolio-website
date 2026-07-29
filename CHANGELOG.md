@@ -2,6 +2,20 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-07-28 (2)
+
+- Added six new Kroger case studies, each with real product screens and its own custom banner mark:
+  - **Upmost Pricing** — a review workflow for higher-cadence competitive price checks.
+  - **Competitive Distance Dashboard** — drive-time thresholds and a network map for defining a defensible competitor set.
+  - **Figma training** — a hands-on session teaching the team a plugin-based table-building workflow.
+  - **AI Guild** — the biweekly guild I lead to help designers get comfortable using AI in their actual work.
+  - **DPM (Digital Project Manager)** — an internal project-management and team-capacity tool I built that's now rolling out org-wide.
+  - **FreshPrompt** — an internal workspace for designers to prompt, code, and preview live with Claude.
+- Redesigned the small "K" mark that appears on every Kroger card — now a custom calligraphic glyph, white, consistently sized and positioned across all seven Kroger projects, with a soft shadow so it stays legible over any background.
+- Fixed a layout bug where a case study modal's title could render hidden behind its own cover banner for any project without a real logo image (affected the flagship Kroger case study and any newly added one) — the modal was using a CSS Grid layout that could collapse a row to zero height in that scenario; switched to a more reliable layout.
+- Fixed mobile/anchor navigation landing section headers flush under the fixed nav bar instead of clear of it.
+- Blurred coworkers' names in a case study screenshot to protect their privacy.
+
 ## 2026-07-28
 
 - Rebuilt three case study modals with real product work instead of placeholder graphics:

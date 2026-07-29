@@ -168,6 +168,14 @@
     background: var(--grad-fuchsia);
     color: #050506;
   }
+  /* Every in-page anchor target needs this — the navbar (navbar.tsx) is
+     `fixed` at h-16 (4rem), so without an offset here, jumping to a
+     section (native <a href="#..."> or the mobile menu's scrollIntoView)
+     lands the section flush at viewport y=0 and its heading renders
+     underneath the fixed navbar. */
+  [id] {
+    scroll-margin-top: 5.5rem;
+  }
 }
 
 @layer utilities {

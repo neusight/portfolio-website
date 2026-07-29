@@ -15,6 +15,28 @@ const GRADIENTS: Record<CaseStudy["gradient"], string> = {
   warm: "linear-gradient(135deg, var(--grad-orange) 0%, var(--grad-fuchsia) 60%, var(--grad-violet) 100%)",
 };
 
+// A corner watermark needs to stay legible over anything behind it — a light
+// screenshot, a photo, or a saturated gradient — so it carries its own soft
+// dark halo rather than depending on context-specific backdrops.
+function CornerMark({ mark }: { mark?: { src: string; alt: string } }) {
+  if (!mark) return null;
+
+  return (
+    <div className="absolute bottom-4 left-4">
+      <div
+        aria-hidden
+        className="absolute -inset-2.5 rounded-full bg-black/30 blur-md"
+      />
+      <img
+        src={mark.src}
+        alt=""
+        aria-hidden
+        className="relative h-7 w-auto drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]"
+      />
+    </div>
+  );
+}
+
 function CoverArt({
   study,
   featured,
@@ -29,7 +51,7 @@ function CoverArt({
   if (context === "modal" && study.logo) {
     return (
       <div
-        className={cn("relative w-full overflow-hidden", aspect)}
+        className={cn("relative w-full shrink-0 overflow-hidden", aspect)}
         style={{ background: GRADIENTS[study.gradient] }}
       >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.25),transparent_45%)]" />
@@ -58,7 +80,7 @@ function CoverArt({
   if (context === "card" && study.screensLayout === "phone" && study.logo) {
     return (
       <div
-        className={cn("relative w-full overflow-hidden", aspect)}
+        className={cn("relative w-full shrink-0 overflow-hidden", aspect)}
         style={{ background: GRADIENTS[study.gradient] }}
       >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.25),transparent_45%)]" />
@@ -92,7 +114,7 @@ function CoverArt({
     const screen = study.screens[0];
     return (
       <div
-        className={cn("relative w-full overflow-hidden", aspect)}
+        className={cn("relative w-full shrink-0 overflow-hidden", aspect)}
         style={{ background: GRADIENTS[study.gradient] }}
       >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.25),transparent_45%)]" />
@@ -116,7 +138,7 @@ function CoverArt({
   if (context === "card" && study.screens?.[0]) {
     const screen = study.screens[0];
     return (
-      <div className={cn("relative w-full overflow-hidden bg-black", aspect)}>
+      <div className={cn("relative w-full shrink-0 overflow-hidden bg-black", aspect)}>
         <img
           src={screen.src}
           alt={screen.alt}
@@ -125,14 +147,7 @@ function CoverArt({
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-black/10" />
 
-        {study.mark && (
-          <img
-            src={study.mark.src}
-            alt=""
-            aria-hidden
-            className="absolute bottom-4 left-4 h-7 w-auto opacity-80 drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]"
-          />
-        )}
+        <CornerMark mark={study.mark} />
 
         <div className="group-hover:translate-x-0 group-hover:opacity-100 absolute top-4 right-4 flex size-9 -translate-x-1 items-center justify-center rounded-full bg-white/15 text-white opacity-0 backdrop-blur-md transition-all duration-300">
           <ArrowUpRight className="size-4" />
@@ -143,7 +158,7 @@ function CoverArt({
 
   return (
     <div
-      className={cn("relative overflow-hidden", aspect)}
+      className={cn("relative w-full shrink-0 overflow-hidden", aspect)}
       style={{ background: GRADIENTS[study.gradient] }}
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.25),transparent_45%)]" />
@@ -160,6 +175,8 @@ function CoverArt({
           </div>
         </div>
       </div>
+
+      <CornerMark mark={study.mark} />
 
       <div className="group-hover:translate-x-0 group-hover:opacity-100 absolute top-4 right-4 flex size-9 -translate-x-1 items-center justify-center rounded-full bg-white/15 text-white opacity-0 backdrop-blur-md transition-all duration-300">
         <ArrowUpRight className="size-4" />
