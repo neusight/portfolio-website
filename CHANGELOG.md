@@ -2,6 +2,10 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-07-29 (8)
+
+- Fixed screenshots in the case study lightbox looking soft/blurry when pinch-zoomed on mobile, even for genuinely high-resolution originals. The image was being rasterized at its small on-screen size and the zoom gesture was just stretching that low-res raster; it now renders at full native resolution from the start and reveals more of that already-sharp image as you zoom in. Added a patent-gradient loading spinner for the moment before a screenshot is ready to display.
+
 ## 2026-07-29 (7)
 
 - Gave the About section's KPI stats (15+, 7+, 10K+, 2x+), the "Design / Develop / Innovate with AI" pillars, the About skills-card headings (Craft, Strategy, AI + Leadership), and the testimonial quote marks the site's signature violet-fuchsia-orange gradient treatment, matching the "AI" accent already used in the hero tagline.
