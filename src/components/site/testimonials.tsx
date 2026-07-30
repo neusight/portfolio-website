@@ -21,7 +21,7 @@ export function Testimonials() {
             delay={i * 0.08}
             className="flex h-full flex-col rounded-2xl border-gradient-card p-6"
           >
-            <Quote className="text-muted-foreground size-6" />
+            <Quote className="size-6" stroke="url(#patent-gradient)" />
             <p className="mt-4 flex-1 text-sm leading-relaxed text-foreground/90">
               &ldquo;{t.quote}&rdquo;
             </p>

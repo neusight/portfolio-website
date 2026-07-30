@@ -2,6 +2,10 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-07-29 (7)
+
+- Gave the About section's KPI stats (15+, 7+, 10K+, 2x+), the "Design / Develop / Innovate with AI" pillars, the About skills-card headings (Craft, Strategy, AI + Leadership), and the testimonial quote marks the site's signature violet-fuchsia-orange gradient treatment, matching the "AI" accent already used in the hero tagline.
+
 ## 2026-07-29 (6)
 
 - Fixed the real cause of the case study modal's close button disappearing after viewing a screenshot: the X was scrolling away along with the modal's own content instead of staying pinned to the corner, so it became unreachable any time you'd scrolled more than a couple screens down (which is exactly what happens on the way to a screenshot deep in a case study). It now stays put regardless of scroll position.

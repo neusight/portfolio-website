@@ -46,7 +46,7 @@ export function ValueProp() {
           >
             <pillar.icon className="mx-auto size-5 text-muted-foreground" />
             <h3 className="mt-4 text-center text-lg font-semibold">
-              {pillar.title}
+              <span className="text-gradient inline-block">{pillar.title}</span>
             </h3>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
               {pillar.body}

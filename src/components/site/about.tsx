@@ -59,6 +59,17 @@ export function About() {
                 </div>
               </div>
             </div>
+
+            <div className="mt-4 flex items-center gap-3">
+              <img
+                src="/luma-logo.png"
+                alt="LUMA Institute"
+                className="h-6 w-auto"
+              />
+              <span className="text-xs text-muted-foreground">
+                Certified in the LUMA System of Innovation
+              </span>
+            </div>
           </div>
 
           <div className="relative">
@@ -81,7 +92,7 @@ export function About() {
           {STATS.map((stat) => (
             <div key={stat.label}>
               <dt className="sr-only">{stat.label}</dt>
-              <dd className="text-3xl font-semibold tracking-tight sm:text-4xl">
+              <dd className="text-gradient inline-block text-3xl font-semibold tracking-tight sm:text-4xl">
                 {stat.value}
               </dd>
               <div className="mt-1 text-sm text-muted-foreground">
@@ -99,8 +110,8 @@ export function About() {
               key={group.category}
               className="rounded-2xl border-gradient-card p-5"
             >
-              <h3 className="text-sm font-semibold tracking-[0.1em] text-muted-foreground uppercase">
-                {group.category}
+              <h3 className="text-sm font-semibold tracking-[0.1em] uppercase">
+                <span className="text-gradient inline-block">{group.category}</span>
               </h3>
               <ul className="mt-4 space-y-2.5">
                 {group.items.map((item) => (
