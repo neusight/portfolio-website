@@ -218,13 +218,19 @@ export function Lightbox({
   // The image element is rendered at its native pixel dimensions (see
   // naturalSize below) and shrunk to fit the viewport via this factor,
   // folded into the same transform pinch-zoom uses — see computeFitScale.
-  const fitScaleRef = useRef(1);
+  // This has to be a motion value, not a plain ref: useTransform below only
+  // recomputes when one of its *listed* motion values emits a change event,
+  // so a ref mutated from an effect would silently never trigger a
+  // recompute once entranceScale/zoomScale had already settled — leaving
+  // the image rendered at its raw native pixel size (no fit-to-screen
+  // shrink at all) any time this value changed on its own.
+  const fitScale = useMotionValue(1);
   // Kept as a separate motion value multiplied into the final scale, rather
   // than driving `scale` directly via the `animate` prop, so the mount/exit
   // "pop" transition never fights with live pinch-zoom updates.
-  const displayScale = useTransform([entranceScale, zoomScale], (latest) => {
-    const [entrance, zoom] = latest as number[];
-    return fitScaleRef.current * entrance * zoom;
+  const displayScale = useTransform([fitScale, entranceScale, zoomScale], (latest) => {
+    const [fit, entrance, zoom] = latest as number[];
+    return fit * entrance * zoom;
   });
   const combinedY = useTransform([dragY, panY], (latest) => {
     const [dismiss, pan] = latest as number[];
@@ -282,17 +288,18 @@ export function Lightbox({
 
   // Recompute the fit-to-screen scale and the zoom cap the moment we know
   // the current image's real dimensions (or the viewport changes size) —
-  // both the display transform (via fitScaleRef) and getMaxZoom() below
-  // read directly off known numbers instead of measuring the DOM.
+  // both the display transform (via fitScale) and getMaxZoom() below read
+  // directly off known numbers instead of measuring the DOM.
   useEffect(() => {
     if (!naturalSize || !viewport) return;
     const fit = computeFitScale(naturalSize, viewport, lastItem.current?.frame);
-    fitScaleRef.current = fit;
+    fitScale.set(fit);
 
     const dpr = window.devicePixelRatio || 1;
     const idealMax = 1 / (fit * dpr);
     maxScaleRef.current = Math.min(MAX_ZOOM, Math.max(MIN_USEFUL_ZOOM, idealMax));
     baseSizeRef.current = null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [naturalSize, viewport]);
 
   // `touch-action: none` alone doesn't reliably stop iOS Safari's native

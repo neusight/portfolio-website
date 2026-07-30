@@ -2,6 +2,10 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-07-29 (9)
+
+- Fixed a bug from the previous fix: on mobile, opening a case study screenshot could render it at its full native pixel size with no scaling applied at all, instead of fit to the screen — looking shattered/broken rather than showing a clean single image. The "fit to screen" amount wasn't correctly wired into the on-screen animation, so it could silently fail to apply. It's now applied reliably every time.
+
 ## 2026-07-29 (8)
 
 - Fixed screenshots in the case study lightbox looking soft/blurry when pinch-zoomed on mobile, even for genuinely high-resolution originals. The image was being rasterized at its small on-screen size and the zoom gesture was just stretching that low-res raster; it now renders at full native resolution from the start and reveals more of that already-sharp image as you zoom in. Added a patent-gradient loading spinner for the moment before a screenshot is ready to display.
