@@ -21,28 +21,6 @@ import { cn } from "@/lib/utils";
 const EASE = [0.16, 1, 0.3, 1] as const;
 const CLOSE_ANIMATION_MS = 220;
 
-// The "fit to screen" shrink has to happen via the same CSS transform used
-// for pinch-zoom, not via a max-width/max-height box constraint — otherwise
-// mobile browsers rasterize the image at that small on-screen size, and
-// zooming just stretches the already-small raster (blurry), regardless of
-// how conservatively the zoom cap below is calculated. Rendering the <img>
-// at its full native pixel dimensions and scaling *down* to fit means
-// zooming back in reveals more of an already-full-resolution raster instead.
-function computeFitScale(
-  natural: { width: number; height: number },
-  viewport: { width: number; height: number },
-  frame: "phone" | undefined,
-) {
-  if (frame === "phone") {
-    const maxWidth = viewport.width < 640 ? 300 : 340;
-    const maxHeight = viewport.height * 0.7;
-    return Math.min(maxWidth / natural.width, maxHeight / natural.height);
-  }
-  const maxWidth = viewport.width * 0.95;
-  const maxHeight = viewport.height * 0.95;
-  return Math.min(maxWidth / natural.width, maxHeight / natural.height);
-}
-
 // Pinch-to-zoom / double-tap-to-zoom tuning. Screenshots are captured at
 // phone resolution, so a generous max zoom actually helps legibility instead
 // of just showing pixelation.
@@ -215,22 +193,12 @@ export function Lightbox({
   const panX = useMotionValue(0);
   const panY = useMotionValue(0);
   const entranceScale = useMotionValue(0.94);
-  // The image element is rendered at its native pixel dimensions (see
-  // naturalSize below) and shrunk to fit the viewport via this factor,
-  // folded into the same transform pinch-zoom uses — see computeFitScale.
-  // This has to be a motion value, not a plain ref: useTransform below only
-  // recomputes when one of its *listed* motion values emits a change event,
-  // so a ref mutated from an effect would silently never trigger a
-  // recompute once entranceScale/zoomScale had already settled — leaving
-  // the image rendered at its raw native pixel size (no fit-to-screen
-  // shrink at all) any time this value changed on its own.
-  const fitScale = useMotionValue(1);
   // Kept as a separate motion value multiplied into the final scale, rather
   // than driving `scale` directly via the `animate` prop, so the mount/exit
   // "pop" transition never fights with live pinch-zoom updates.
-  const displayScale = useTransform([fitScale, entranceScale, zoomScale], (latest) => {
-    const [fit, entrance, zoom] = latest as number[];
-    return fit * entrance * zoom;
+  const displayScale = useTransform([entranceScale, zoomScale], (latest) => {
+    const [entrance, zoom] = latest as number[];
+    return entrance * zoom;
   });
   const combinedY = useTransform([dragY, panY], (latest) => {
     const [dismiss, pan] = latest as number[];
@@ -239,16 +207,6 @@ export function Lightbox({
 
   const [isZoomed, setIsZoomed] = useState(false);
   useMotionValueEvent(zoomScale, "change", (value) => setIsZoomed(value > 1.01));
-
-  // Null until the current image's onLoad fires, so we know its true native
-  // pixel dimensions before ever laying it out — see computeFitScale above.
-  const [naturalSize, setNaturalSize] = useState<{
-    width: number;
-    height: number;
-  } | null>(null);
-  const [viewport, setViewport] = useState<{ width: number; height: number } | null>(
-    null,
-  );
 
   const imgRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -276,31 +234,6 @@ export function Lightbox({
     animate(entranceScale, open ? 1 : 0.96, { duration: 0.22, ease: EASE });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
-
-  useEffect(() => {
-    function updateViewport() {
-      setViewport({ width: window.innerWidth, height: window.innerHeight });
-    }
-    updateViewport();
-    window.addEventListener("resize", updateViewport);
-    return () => window.removeEventListener("resize", updateViewport);
-  }, []);
-
-  // Recompute the fit-to-screen scale and the zoom cap the moment we know
-  // the current image's real dimensions (or the viewport changes size) —
-  // both the display transform (via fitScale) and getMaxZoom() below read
-  // directly off known numbers instead of measuring the DOM.
-  useEffect(() => {
-    if (!naturalSize || !viewport) return;
-    const fit = computeFitScale(naturalSize, viewport, lastItem.current?.frame);
-    fitScale.set(fit);
-
-    const dpr = window.devicePixelRatio || 1;
-    const idealMax = 1 / (fit * dpr);
-    maxScaleRef.current = Math.min(MAX_ZOOM, Math.max(MIN_USEFUL_ZOOM, idealMax));
-    baseSizeRef.current = null;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [naturalSize, viewport]);
 
   // `touch-action: none` alone doesn't reliably stop iOS Safari's native
   // pinch-zoom-the-page gesture — Safari's multi-touch gesture recognizer
@@ -342,17 +275,13 @@ export function Lightbox({
     tapStartRef.current = null;
     lastTapRef.current = null;
     setIsZoomed(false);
-    setNaturalSize(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, open]);
 
   // getBoundingClientRect() returns the *painted* (post-transform) box, so
-  // it's only accurate to derive the image's unscaled (zoomScale === 1)
-  // footprint the first time a gesture starts. Cached per image so later
-  // pinch/pan events can keep using it as zoomScale changes. The zoom cap
-  // itself (maxScaleRef) is computed separately, directly from the known
-  // native size and fit scale — see the effect above — since it doesn't
-  // depend on anything this measurement provides.
+  // it's only accurate to derive the image's unscaled footprint the first
+  // time a gesture starts (when zoomScale is still ~1). Cached per image so
+  // later pinch/pan events can keep using it as zoomScale changes.
   function getBaseSize() {
     if (baseSizeRef.current) return baseSizeRef.current;
     const el = imgRef.current;
@@ -361,10 +290,21 @@ export function Lightbox({
     const scale = zoomScale.get() || 1;
     const size = { width: rect.width / scale, height: rect.height / scale };
     baseSizeRef.current = size;
+
+    // Cap zoom at (roughly) the point where displayed pixels catch up with
+    // the source file's actual pixel count — past that, scale is just
+    // upsampling. Computed per image since screenshot resolutions vary a
+    // lot across case studies.
+    const dpr = window.devicePixelRatio || 1;
+    const nativeWidth = el.naturalWidth || size.width * dpr;
+    const idealMax = nativeWidth / (size.width * dpr);
+    maxScaleRef.current = Math.min(MAX_ZOOM, Math.max(MIN_USEFUL_ZOOM, idealMax));
+
     return size;
   }
 
   function getMaxZoom() {
+    getBaseSize();
     return maxScaleRef.current ?? MAX_ZOOM;
   }
 
@@ -623,54 +563,26 @@ export function Lightbox({
         </>
       )}
 
-      {!naturalSize && (
-        <div
-          aria-hidden
-          className="absolute inset-0 z-[5] flex items-center justify-center"
-        >
-          <div
-            className="size-10 animate-spin rounded-full"
-            style={{
-              background:
-                "conic-gradient(from 0deg, var(--grad-violet), var(--grad-fuchsia), var(--grad-orange), var(--grad-violet))",
-              WebkitMask:
-                "radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px))",
-              mask: "radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px))",
-            }}
-          />
-        </div>
-      )}
-
       <motion.img
         key={item.src}
         ref={imgRef}
         src={item.src}
         alt={item.alt}
         draggable={false}
-        onLoad={(e) => {
-          const el = e.currentTarget;
-          setNaturalSize({ width: el.naturalWidth, height: el.naturalHeight });
-        }}
         initial={{ opacity: 0 }}
-        animate={{ opacity: open && naturalSize ? 1 : 0 }}
+        animate={{ opacity: open ? 1 : 0 }}
         transition={{ duration: 0.22, ease: EASE }}
-        style={{
-          x: panX,
-          y: combinedY,
-          scale: displayScale,
-          touchAction: "none",
-          width: naturalSize?.width,
-          height: naturalSize?.height,
-          pointerEvents: naturalSize ? "auto" : "none",
-        }}
+        style={{ x: panX, y: combinedY, scale: displayScale, touchAction: "none" }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerCancel}
         className={cn(
-          "relative z-[5] shrink-0 shadow-[0_30px_100px_-20px_rgba(0,0,0,0.8)] ring-1 ring-white/10",
+          "relative z-[5] object-contain shadow-[0_30px_100px_-20px_rgba(0,0,0,0.8)] ring-1 ring-white/10",
           isZoomed ? "cursor-grab active:cursor-grabbing" : "cursor-zoom-in",
-          item.frame === "phone" ? "rounded-[2.25rem]" : "rounded-lg sm:rounded-xl",
+          item.frame === "phone"
+            ? "max-h-[70vh] max-w-[300px] rounded-[2.25rem] sm:max-w-[340px]"
+            : "max-h-[95vh] max-w-[95vw] rounded-lg sm:rounded-xl",
         )}
       />
 

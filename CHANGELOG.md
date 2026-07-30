@@ -2,6 +2,10 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-07-29 (10)
+
+- Reverted the last two attempts at fixing blurry mobile screenshot zoom — the second attempt made things visibly worse (squashed/cropped screenshots on mobile). Back to the previous, reliable lightbox behavior while a better fix for the blurriness is worked out separately.
+
 ## 2026-07-29 (9)
 
 - Fixed a bug from the previous fix: on mobile, opening a case study screenshot could render it at its full native pixel size with no scaling applied at all, instead of fit to the screen — looking shattered/broken rather than showing a clean single image. The "fit to screen" amount wasn't correctly wired into the on-screen animation, so it could silently fail to apply. It's now applied reliably every time.
