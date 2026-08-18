@@ -5,17 +5,17 @@ const PILLARS = [
   {
     icon: Palette,
     title: "Design",
-    body: "Human-centered product design across web, mobile, and enterprise systems — from discovery through pixel-perfect execution.",
+    body: "Human-centered product design across web, mobile, and enterprise systems, from discovery through pixel-perfect execution.",
   },
   {
     icon: Code2,
     title: "Develop",
-    body: "Front-end engineering chops to turn designs into working, production-ready software — not just static mockups handed off and hoped for.",
+    body: "Front-end engineering chops to turn designs into working, production-ready software, not just static mockups handed off and hoped for.",
   },
   {
     icon: Sparkles,
     title: "Innovate with AI",
-    body: "AI-assisted workflows — Claude, ChatGPT, Copilot, Figma AI — that accelerate research, documentation, and delivery without cutting corners on craft.",
+    body: "AI-assisted workflows (Claude, ChatGPT, Copilot, Figma AI) that accelerate research, documentation, and delivery without cutting corners on craft.",
   },
 ];
 
@@ -27,12 +27,12 @@ export function ValueProp() {
           Design + Engineering + AI
         </span>
         <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-          I don&rsquo;t just design solutions — I help build them.
+          I don&rsquo;t just design solutions. I help build them.
         </h2>
         <p className="mt-4 max-w-2xl text-muted-foreground">
           I&rsquo;m revolutionizing how enterprise teams work by pairing
           product design with hands-on front-end development and modern AI
-          tooling, so what ships is solid, enterprise-ready software — not
+          tooling, so what ships is solid, enterprise-ready software, not
           just a Figma file.
         </p>
       </Reveal>

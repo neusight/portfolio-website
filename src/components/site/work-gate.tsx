@@ -216,7 +216,7 @@ export function WorkGate() {
                     exit={{ opacity: 0 }}
                     className="mt-3 text-sm text-destructive"
                   >
-                    Incorrect password — try again.
+                    Incorrect password. Try again.
                   </motion.p>
                 )}
               </AnimatePresence>

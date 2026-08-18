@@ -2,6 +2,11 @@
 
 Notable changes to seankwatkins.com, most recent first. Updated on every ship.
 
+## 2026-08-17
+
+- Added a new "Featured Build" section, outside the password-gated case studies, spotlighting Ourly (myourly.app) — a co-parenting coordination app designed and built solo. Includes real product screenshots (calendar, shared ledger, family admin, and an owner-only stats view), with personal email addresses blurred out. The card carries a "Live product" badge and a "View it live" button linking straight to the live site, and every case study card now shows a hand cursor on hover so it's clear they're clickable.
+- Reworded body copy across the case studies and site sections to read more naturally in a few places, cutting back on em dashes in favor of plainer punctuation.
+
 ## 2026-07-29 (10)
 
 - Reverted the last two attempts at fixing blurry mobile screenshot zoom — the second attempt made things visibly worse (squashed/cropped screenshots on mobile). Back to the previous, reliable lightbox behavior while a better fix for the blurriness is worked out separately.

@@ -17,7 +17,7 @@ export function Contact() {
             </h2>
             <p className="mx-auto mt-5 max-w-md text-muted-foreground">
               I&rsquo;m happiest on teams tackling genuinely hard product
-              problems — say hello.
+              problems. Say hello.
             </p>
 
             <div className="mx-auto mt-10 max-w-2xl">

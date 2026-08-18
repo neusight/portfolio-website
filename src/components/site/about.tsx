@@ -32,13 +32,13 @@ export function About() {
                 together at scale.
               </p>
               <p>
-                I operate beyond the boundaries of a typical product team —
+                I operate beyond the boundaries of a typical product team,
                 bringing leadership, systems-level thinking, and a bias for
                 building over waiting. When an organization has a gap in its
                 toolkit, I close it myself, standing up in-house tooling
                 instead of stalling on procurement. And in fast-moving,
                 high-stakes environments, time isn&rsquo;t a constraint I
-                manage around — it&rsquo;s a discipline I own, which is why
+                manage around. It&rsquo;s a discipline I own, which is why
                 the initiatives I lead ship on schedule.
               </p>
             </div>

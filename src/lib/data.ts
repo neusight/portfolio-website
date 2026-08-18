@@ -31,6 +31,70 @@ export type CaseStudy = {
   screens?: { src: string; alt: string; title: string; body: string }[];
   screensLayout?: "browser" | "phone";
   map?: { src: string; alt: string; title: string; body: string };
+  liveUrl?: string;
+  badge?: string;
+};
+
+export const MYOURLY_STUDY: CaseStudy = {
+  slug: "myourly",
+  title: "Ourly: coordination for co-parenting families, built solo end to end",
+  client: "Independent",
+  year: "2026",
+  role: "Founder · Designer · Engineer",
+  category: "0→1 · Personal Product",
+  blurb:
+    "A shared calendar, message thread, and expense ledger for co-parents, designed and built entirely on my own from product concept through a live, deployed multi-tenant application. Not client work: my own idea, my own code, running in production today.",
+  tags: ["0→1", "Full-stack", "Family tech"],
+  metric: { value: "Live", label: "solo-built & in production" },
+  gradient: "cool",
+  liveUrl: "https://myourly.app",
+  badge: "Live product",
+  logo: { src: "/myourly-lockup.png", alt: "Ourly", plate: true },
+  mark: { src: "/myourly-icon.png", alt: "" },
+  screens: [
+    {
+      src: "/myourly-calendar.png",
+      alt: "Ourly shared calendar showing color-coded events per parent, including custody weekends, school pickups, and open houses",
+      title: "A shared custody calendar",
+      body: "Every parent gets their own color; pickups, custody weekends, and school events all live on one calendar instead of scattered across texts and separate apps.",
+    },
+    {
+      src: "/myourly-ledger.png",
+      alt: "Ourly shared ledger showing a $60 lunch expense request with approval status, and a form for requesting a new split",
+      title: "Splitting shared expenses",
+      body: "Request a split, tag who owes what, attach a receipt, and track approval. It replaces spreadsheet math and 'did you get my Venmo' texts with an auditable trail.",
+    },
+    {
+      src: "/myourly-admin.png",
+      alt: "Ourly Family Admin screen for managing family members, permissions, kids, and invites",
+      title: "Family Admin",
+      body: "Manage who has access, add kids so they show up as taggable options on the calendar, and invite the other household in, all from one settings surface.",
+    },
+    {
+      src: "/myourly-stats.png",
+      alt: "Ourly owner-only stats dashboard showing aggregate family, user, event, message, and expense counts with no individual names or content exposed",
+      title: "Operating it as a real product",
+      body: "Because this is a real multi-tenant app and not a personal script, there's an owner-only stats view for tracking adoption across every family account, deliberately stripped of message content, expense detail, and individual names.",
+    },
+  ],
+  details: [
+    {
+      label: "The problem",
+      body: "Coordinating pickups, school events, and shared costs across two households usually means the same information fragmented across texts, shared docs, and apps that weren't built for the job. This one is personal to me.",
+    },
+    {
+      label: "What I built",
+      body: "Designed and built Ourly end to end, solo: a shared calendar with per-parent color coding, a permanent family message thread, an expense-splitting ledger with request/approve flows, and family-admin controls for members and kids.",
+    },
+    {
+      label: "Full-stack ownership",
+      body: "Owned every layer myself: product decisions, UI design, and the code behind it, from auth and the multi-tenant data model to the live, deployed application at myourly.app.",
+    },
+    {
+      label: "Shipping and operating it",
+      body: "Live in production today, with its own owner-facing analytics for monitoring adoption across every family using it. Not a prototype sitting in Figma: a real running service.",
+    },
+  ],
 };
 
 export const CASE_STUDIES: CaseStudy[] = [
@@ -78,7 +142,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     role: "Senior Product Designer",
     category: "Enterprise Product Design · Competitive Pricing",
     blurb:
-      "Designed Upmost Pricing, a review workflow that raises the cadence of competitive price checks — surfacing suggested price actions, flagged issues, and execution status by product group so merchants can act the same day a competitor moves, instead of waiting on the next periodic cycle.",
+      "Designed Upmost Pricing, a review workflow that raises the cadence of competitive price checks, surfacing suggested price actions, flagged issues, and execution status by product group so merchants can act the same day a competitor moves, instead of waiting on the next periodic cycle.",
     tags: ["Competitive pricing", "Enterprise", "Workflow design"],
     metric: { value: "Higher cadence", label: "competitive price reviews" },
     gradient: "warm",
@@ -92,13 +156,13 @@ export const CASE_STUDIES: CaseStudy[] = [
         src: "/kroger-upmost-program-hold.png",
         alt: "Upmost Pricing 'Program Hold' review screen showing three product groups with competitor and strategy variance, suggested price actions, flagged issues, and execution status",
         title: "Program Hold review queue",
-        body: "The core review surface — each held product group shows how far Kroger's price sits from competitors and strategy, a suggested price action, and how many issues need resolving before it can move, so a merchant can clear a queue in minutes instead of days.",
+        body: "The core review surface: each held product group shows how far Kroger's price sits from competitors and strategy, a suggested price action, and how many issues need resolving before it can move, so a merchant can clear a queue in minutes instead of days.",
       },
     ],
     details: [
       {
         label: "The gap",
-        body: "Competitive price checks ran on a slow, periodic cycle — by the time a price change worked its way through review, competitors had often already moved again, leaving Kroger's shelf price stale.",
+        body: "Competitive price checks ran on a slow, periodic cycle. By the time a price change worked its way through review, competitors had often already moved again, leaving Kroger's shelf price stale.",
       },
       {
         label: "Design approach",
@@ -122,7 +186,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     role: "Senior Product Designer",
     category: "Enterprise Product Design · Rules Engine",
     blurb:
-      "Designed the Competitive Distance Dashboard, part of Rules Studio, so pricing teams can configure drive-time thresholds — globally, by division, or by individual competitor — and see the resulting store-to-store network on a map, keeping only competitors within a meaningful driving distance in the price comparison.",
+      "Designed the Competitive Distance Dashboard, part of Rules Studio, so pricing teams can configure drive-time thresholds globally, by division, or by individual competitor, and see the resulting store-to-store network on a map, keeping only competitors within a meaningful driving distance in the price comparison.",
     tags: ["Rules engine", "Enterprise", "Data visualization"],
     metric: { value: "500K+", label: "store pairs analyzed nationwide" },
     gradient: "signature",
@@ -136,23 +200,23 @@ export const CASE_STUDIES: CaseStudy[] = [
         src: "/kroger-competitive-distance-thresholds.png",
         alt: "Threshold Configuration screen showing global, division, and competitor-level drive-time thresholds with approval status and effective dates",
         title: "Threshold configuration",
-        body: "Global default, division-level, and competitor-specific drive-time thresholds, each with its own approval trail — the most specific rule always wins, so a pricing analyst can see exactly why a store pair is or isn't in play.",
+        body: "Global default, division-level, and competitor-specific drive-time thresholds, each with its own approval trail. The most specific rule always wins, so a pricing analyst can see exactly why a store pair is or isn't in play.",
       },
       {
         src: "/kroger-competitive-distance-network-map.png",
         alt: "Network Map screen showing a store's competitor connections color-coded by drive time, with filters for region, market reference, and status",
         title: "Network map",
-        body: "The same thresholds plotted on a map — each line is a store-to-store connection color-coded by drive time, so a reviewer can visually confirm the rules are producing a sensible competitive set before signing off.",
+        body: "The same thresholds plotted on a map: each line is a store-to-store connection color-coded by drive time, so a reviewer can visually confirm the rules are producing a sensible competitive set before signing off.",
       },
     ],
     details: [
       {
         label: "The problem",
-        body: "Which competitor stores actually mattered for a price comparison was inconsistent — straight-line distance doesn't reflect how customers really shop, and there was no shared, auditable rule for where to draw the line.",
+        body: "Which competitor stores actually mattered for a price comparison was inconsistent. Straight-line distance doesn't reflect how customers really shop, and there was no shared, auditable rule for where to draw the line.",
       },
       {
         label: "Design approach",
-        body: "Designed a threshold hierarchy — global default, division overrides, competitor overrides — with the most specific rule always winning, plus a map view so a reviewer could visually sanity-check the network before approving it.",
+        body: "Designed a threshold hierarchy of global default, division overrides, and competitor overrides, with the most specific rule always winning, plus a map view so a reviewer could visually sanity-check the network before approving it.",
       },
       {
         label: "Systems thinking",
@@ -160,7 +224,7 @@ export const CASE_STUDIES: CaseStudy[] = [
       },
       {
         label: "Business impact",
-        body: "Gave pricing teams a defensible, auditable answer to 'why is this competitor in the comparison' — replacing ad hoc judgment calls with a rule anyone could inspect and approve.",
+        body: "Gave pricing teams a defensible, auditable answer to 'why is this competitor in the comparison,' replacing ad hoc judgment calls with a rule anyone could inspect and approve.",
       },
     ],
   },
@@ -172,7 +236,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     role: "Senior Product Designer",
     category: "Employee Empowerment · Training",
     blurb:
-      "Led a hands-on Figma training to close the gap between designers who already lived in the tool and teammates who didn't — walking the room through the Table Builder plugin so anyone could turn raw spreadsheet data into a production-ready table in seconds. Investing in the people around me has always mattered as much as the pixels: helping teammates get comfortable, capable, and confident in the tools they use every day.",
+      "Led a hands-on Figma training to close the gap between designers who already lived in the tool and teammates who didn't, walking the room through the Table Builder plugin so anyone could turn raw spreadsheet data into a production-ready table in seconds. Investing in the people around me has always mattered as much as the pixels: helping teammates get comfortable, capable, and confident in the tools they use every day.",
     tags: ["Leadership", "Mentorship", "Figma training"],
     metric: { value: "Team-wide", label: "Figma fluency" },
     gradient: "warm",
@@ -186,31 +250,31 @@ export const CASE_STUDIES: CaseStudy[] = [
         src: "/kroger-figma-training-1.png",
         alt: "Training deck title slide, 'Table Trickery: Making your design life easier one table at a time'",
         title: "Setting the stage",
-        body: "Opened with a clear promise, not a feature list — this session was going to make one specific, everyday pain point disappear: building tables in Figma by hand.",
+        body: "Opened with a clear promise, not a feature list. This session was going to make one specific, everyday pain point disappear: building tables in Figma by hand.",
       },
       {
         src: "/kroger-figma-training-2.png",
         alt: "Training deck slide introducing the Table Builder Figma plugin, showing its plugin page with 31.7k users",
         title: "Introducing Table Builder",
-        body: "Introduced the plugin that does the heavy lifting — paste in spreadsheet data and it generates a fully-built, real Figma table in seconds instead of minutes of manual cell-by-cell work.",
+        body: "Introduced the plugin that does the heavy lifting: paste in spreadsheet data and it generates a fully built, real Figma table in seconds instead of minutes of manual cell-by-cell work.",
       },
       {
         src: "/kroger-figma-training-3.png",
         alt: "Training deck slide showing an Excel spreadsheet and copy/paste keyboard shortcuts",
         title: "Step one: copy the data",
-        body: "Walked through the workflow live, starting from where everyone already was — switch to Excel, select the data, copy it. No new habits to learn before the payoff arrives.",
+        body: "Walked through the workflow live, starting from where everyone already was: switch to Excel, select the data, copy it. No new habits to learn before the payoff arrives.",
       },
       {
         src: "/kroger-figma-training-4.png",
         alt: "Training deck slide showing the Figma right-click menu with Plugins > Table Builder > Generate new table",
         title: "Step two: generate the table",
-        body: "Right-click the table cell component, choose Plugins > Table Builder > Generate new table — and the room watched a blank component turn into a populated table in real time.",
+        body: "Right-click the table cell component, choose Plugins > Table Builder > Generate new table, and the room watched a blank component turn into a populated table in real time.",
       },
     ],
     details: [
       {
         label: "Leading by lifting others up",
-        body: "Growth on a team comes from investing in the people, not just the work — I treat mentorship and enablement as core to being a senior designer, not a side project.",
+        body: "Growth on a team comes from investing in the people, not just the work. I treat mentorship and enablement as core to being a senior designer, not a side project.",
       },
       {
         label: "Meeting people where they are",
@@ -218,11 +282,11 @@ export const CASE_STUDIES: CaseStudy[] = [
       },
       {
         label: "Hands-on, not theoretical",
-        body: "Walked the room through the workflow live, step by step — copy data from Excel, right-click a component, generate a table — so people left with a skill, not just notes.",
+        body: "Walked the room through the workflow live, step by step: copy data from Excel, right-click a component, generate a table, so people left with a skill, not just notes.",
       },
       {
         label: "Impact",
-        body: "Teammates left able to build production-ready tables in seconds instead of dreading them — one less piece of manual busywork standing between a designer and the actual design problem.",
+        body: "Teammates left able to build production-ready tables in seconds instead of dreading them, one less piece of manual busywork standing between a designer and the actual design problem.",
       },
     ],
   },
@@ -248,19 +312,19 @@ export const CASE_STUDIES: CaseStudy[] = [
         src: "/kroger-ai-guild-mural.png",
         alt: "AI Guild board showing the guild roster and roles, role definitions, vision and purpose, and the seven-step AI Guild Path playbook",
         title: "The guild board",
-        body: "The living reference for the guild — roster and roles, how each role is defined, our shared vision, and the playbook every session runs against. See the full board below.",
+        body: "The living reference for the guild: roster and roles, how each role is defined, our shared vision, and the playbook every session runs against. See the full board below.",
       },
     ],
     map: {
       src: "/kroger-ai-guild-mural.png",
       alt: "AI Guild board showing the guild roster and roles, role definitions, vision and purpose, and the seven-step AI Guild Path playbook",
       title: "Running the guild on a repeatable playbook",
-      body: "Every session follows the same seven-step path — meet and listen, identify the problem statement, map the current workflow, identify the tools already in play, flag risks and guardrails, deliver a solution and measure impact, then gather feedback and uplifts. That consistency is what lets a biweekly cadence actually compound instead of starting from zero each time.",
+      body: "Every session follows the same seven-step path: meet and listen, identify the problem statement, map the current workflow, identify the tools already in play, flag risks and guardrails, deliver a solution and measure impact, then gather feedback and uplifts. That consistency is what lets a biweekly cadence actually compound instead of starting from zero each time.",
     },
     details: [
       {
         label: "Leading the guild",
-        body: "Shaped the guild's structure and roles and lead it directly — I facilitate every exercise myself rather than delegating the sessions I've designed.",
+        body: "Shaped the guild's structure and roles and lead it directly. I facilitate every exercise myself rather than delegating the sessions I've designed.",
       },
       {
         label: "A cadence that compounds",
@@ -284,7 +348,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     role: "Senior Product Designer",
     category: "0→1 · Internal Tooling",
     blurb:
-      "Identified a gap in how design and engineering teams tracked project health and capacity, and built Digital Project Manager (DPM) to close it — a full project management and team-bandwidth tracking suite where directors see manager-level capacity and managers see individual capacity, all in one connected view. After presenting DPM to a 160+ person organization to strong reception, it's now rolling out as the go-to internal project management tool across the organization.",
+      "Identified a gap in how design and engineering teams tracked project health and capacity, and built Digital Project Manager (DPM) to close it: a full project management and team-bandwidth tracking suite where directors see manager-level capacity and managers see individual capacity, all in one connected view. After presenting DPM to a 160+ person organization to strong reception, it's now rolling out as the go-to internal project management tool across the organization.",
     tags: ["0→1", "Internal tooling", "Leadership"],
     metric: { value: "160+", label: "person org, now scaling company-wide" },
     gradient: "signature",
@@ -298,13 +362,13 @@ export const CASE_STUDIES: CaseStudy[] = [
         src: "/kroger-dpm-dashboard.png",
         alt: "DPM dashboard showing backlog, in-flight, due-soon, and completed project counts, with a phase breakdown across the design process",
         title: "Dashboard",
-        body: "An at-a-glance view of every project in flight — backlog, due soon, recently completed, and a phase breakdown from discovery through handoff — so nothing depends on memory or a status-check meeting.",
+        body: "An at-a-glance view of every project in flight: backlog, due soon, recently completed, and a phase breakdown from discovery through handoff, so nothing depends on memory or a status-check meeting.",
       },
       {
         src: "/kroger-dpm-team-bandwidth.png",
         alt: "DPM team capacity view showing a manager's team utilization, capacity status, and each direct report's individual workload percentage",
         title: "Director and manager visibility",
-        body: "Select a manager to see their team's utilization at a glance — directors see manager-level rollups, managers see each direct report's individual capacity, so bandwidth conversations run on shared data instead of guesswork.",
+        body: "Select a manager to see their team's utilization at a glance. Directors see manager-level rollups, managers see each direct report's individual capacity, so bandwidth conversations run on shared data instead of guesswork.",
       },
       {
         src: "/kroger-dpm-project-view.png",
@@ -316,19 +380,19 @@ export const CASE_STUDIES: CaseStudy[] = [
         src: "/kroger-dpm-journal.png",
         alt: "DPM personal journal feature for capturing daily design decisions, meeting notes, and reflections, organized by year",
         title: "A personal record, built in",
-        body: "A running journal for daily decisions, meeting notes, and rationale, organized by year — the context that normally lives nowhere and gets lost by the next design review.",
+        body: "A running journal for daily decisions, meeting notes, and rationale, organized by year: the context that normally lives nowhere and gets lost by the next design review.",
       },
     ],
     map: {
       src: "/kroger-dpm-business-case.png",
       alt: "Business case board covering DPM's current capabilities, use cases, what must be true to scale beyond one person, and how success is defined",
       title: "The pitch that got DPM approved to scale",
-      body: "Before DPM could scale beyond me, it needed a real business case, not just a demo — the problem it solved, the cost model, what had to be true for a team and then an org to run on it (hosting, auth, security sign-off), and how success would be measured. This is the board I walked leadership through to get there.",
+      body: "Before DPM could scale beyond me, it needed a real business case, not just a demo: the problem it solved, the cost model, what had to be true for a team and then an org to run on it (hosting, auth, security sign-off), and how success would be measured. This is the board I walked leadership through to get there.",
     },
     details: [
       {
         label: "Spotting the gap",
-        body: "Generic project-management tools track engineering tickets, not the artifacts a design org actually needs — edge cases, accessibility notes, design rationale, and real bandwidth. I built DPM to close that gap, starting with my own workflow.",
+        body: "Generic project-management tools track engineering tickets, not the artifacts a design org actually needs: edge cases, accessibility notes, design rationale, and real bandwidth. I built DPM to close that gap, starting with my own workflow.",
       },
       {
         label: "Director and manager visibility",
@@ -336,7 +400,7 @@ export const CASE_STUDIES: CaseStudy[] = [
       },
       {
         label: "Making the case to executives",
-        body: "Took DPM from a personal tool to an approved platform by presenting a clear business case to leadership — hosting model, security review, cost, and how success would be measured — not just a walkthrough of features.",
+        body: "Took DPM from a personal tool to an approved platform by presenting a clear business case to leadership: hosting model, security review, cost, and how success would be measured, not just a walkthrough of features.",
       },
       {
         label: "Business impact",
@@ -352,7 +416,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     role: "Senior Product Designer",
     category: "0→1 · Internal Tooling",
     blurb:
-      "Built FreshPrompt, an internal application that gives designers a single home base for working with Claude on the team's own Anthropic access — organizing AI projects and saved chats into folders, previewing a live localhost-style view of what they're building, and editing code directly in a built-in editor. Every project auto-generates its own changelog and project-memory files as work progresses, so context persists between sessions instead of living in someone's head. I'm currently extending FreshPrompt with a live, drag-and-drop, Figma-style canvas, so writing to AI, organizing work, and visually designing happen in one continuous workflow.",
+      "Built FreshPrompt, an internal application that gives designers a single home base for working with Claude on the team's own Anthropic access, organizing AI projects and saved chats into folders, previewing a live localhost-style view of what they're building, and editing code directly in a built-in editor. Every project auto-generates its own changelog and project-memory files as work progresses, so context persists between sessions instead of living in someone's head. I'm currently extending FreshPrompt with a live, drag-and-drop, Figma-style canvas, so writing to AI, organizing work, and visually designing happen in one continuous workflow.",
     tags: ["0→1", "Internal tooling", "AI workflows"],
     metric: { value: "Auto-generated", label: "changelog & project memory" },
     gradient: "cool",
@@ -366,13 +430,13 @@ export const CASE_STUDIES: CaseStudy[] = [
         src: "/kroger-freshprompt-welcome.png",
         alt: "FreshPrompt welcome screen with a 'Start a new chat' call to action and a Projects / My Computer toggle in the sidebar",
         title: "One home base for building with Claude",
-        body: "The entry point for every designer on the team — a single place to start a chat or open a project, built directly on the org's own Anthropic access instead of a patchwork of personal tools.",
+        body: "The entry point for every designer on the team: a single place to start a chat or open a project, built directly on the org's own Anthropic access instead of a patchwork of personal tools.",
       },
       {
         src: "/kroger-freshprompt-projects.png",
         alt: "FreshPrompt project view showing chats and auto-tracked files including CHANGELOG.md, index.html, package.json, and README.md, with suggestion chips for common actions",
         title: "Projects, chats, and files in one place",
-        body: "Projects hold their own chats and files — Claude saves everything here automatically, including an auto-generated changelog. Designers can also upload files, create new ones, or bring in an entire repo.",
+        body: "Projects hold their own chats and files. Claude saves everything here automatically, including an auto-generated changelog, and designers can also upload files, create new ones, or bring in an entire repo.",
       },
       {
         src: "/kroger-freshprompt-editor.png",
@@ -402,7 +466,7 @@ export const CASE_STUDIES: CaseStudy[] = [
   },
   {
     slug: "climate-pros-design-system",
-    title: "Building a design system — and the team process around it",
+    title: "Building a design system and the team process around it",
     client: "Climate Pros, LLC",
     year: "Apr 2021 — Oct 2022",
     role: "Senior User Experience Designer",
@@ -419,20 +483,20 @@ export const CASE_STUDIES: CaseStudy[] = [
         src: "/climate-pros-dashboard.png",
         alt: "WatchTower account dashboard showing location health scores, alarm resolution, work orders, and a location health map",
         title: "Account dashboard",
-        body: "The landing view for facilities teams — location health scores, alarm and work order resolution, and the most common alarm and intelligence events, all rolled up across every site with a map view for drilling into a single location.",
+        body: "The landing view for facilities teams: location health scores, alarm and work order resolution, and the most common alarm and intelligence events, all rolled up across every site with a map view for drilling into a single location.",
       },
       {
         src: "/climate-pros-reports.png",
         alt: "WatchTower account reports flow with a modal for creating a new scheduled report",
         title: "Account reports",
-        body: "A guided flow for building recurring compliance reports — selecting recipients, a location, and a report type (like FDA hourly temperature logs) without leaving the page.",
+        body: "A guided flow for building recurring compliance reports: selecting recipients, a location, and a report type (like FDA hourly temperature logs) without leaving the page.",
       },
     ],
     map: {
       src: "/climate-pros-intelligence-map.png",
       alt: "Flow diagram mapping the WatchTower Intelligence module, from location selection through refrigerant leak detection and pressure event drill-down",
       title: "Mapping the intelligence layer",
-      body: "Before touching Figma, I mapped how location intelligence should actually work — how a user moves from the dashboard into the Location Health Score and Refrigerant Leak Detection modules, and how the pressure-events table drills down into device-level charts. This flow became the shared reference for engineering and product throughout the build.",
+      body: "Before touching Figma, I mapped how location intelligence should actually work: how a user moves from the dashboard into the Location Health Score and Refrigerant Leak Detection modules, and how the pressure-events table drills down into device-level charts. This flow became the shared reference for engineering and product throughout the build.",
     },
     details: [
       {
@@ -456,13 +520,13 @@ export const CASE_STUDIES: CaseStudy[] = [
   {
     slug: "web-marketing-bureau-ux",
     title:
-      "Architecting a 0→1 mobile app — from a single flowchart to a 30-screen production system",
+      "Architecting a 0→1 mobile app: from a single flowchart to a 30-screen production system",
     client: "The Web and Marketing Bureau, LLC",
     year: "Oct 2020 — Apr 2021",
     role: "Senior User Experience Architect",
     category: "UX Architecture · 0→1 Mobile Product Design",
     blurb:
-      "Owned end-to-end UX architecture for Chattic, a community-driven app for crowdsourcing the value of secondhand finds. Mapped the complete application flow before a single screen was drawn, then designed and specified a 30+ screen production system — onboarding, a social valuation feed, guided item capture, and appraiser matching — while directing a team of designers across the agency's broader client roster.",
+      "Owned end-to-end UX architecture for Chattic, a community-driven app for crowdsourcing the value of secondhand finds. Mapped the complete application flow before a single screen was drawn, then designed and specified a 30+ screen production system, including onboarding, a social valuation feed, guided item capture, and appraiser matching, while directing a team of designers across the agency's broader client roster.",
     tags: ["0→1", "Mobile UX", "Team leadership"],
     metric: { value: "30+", label: "screens architected end-to-end" },
     gradient: "warm",
@@ -473,31 +537,31 @@ export const CASE_STUDIES: CaseStudy[] = [
         src: "/chattic-splash.png",
         alt: "Chattic splash screen with the brand mark on a blue gradient background",
         title: "Splash & brand entry",
-        body: "The first moment of the experience — the mark animates in, sets tone, and hands off to the home feed in under two seconds.",
+        body: "The first moment of the experience: the mark animates in, sets tone, and hands off to the home feed in under two seconds.",
       },
       {
         src: "/chattic-feeds.png",
         alt: "Chattic social feed showing community members asking what their found items are worth",
         title: "Social valuation feed",
-        body: "The core loop: a member posts a found or inherited item and the community weighs in on what it's worth — part marketplace, part social feed.",
+        body: "The core loop: a member posts a found or inherited item and the community weighs in on what it's worth, part marketplace, part social feed.",
       },
       {
         src: "/chattic-post.png",
         alt: "Chattic item posting flow with fields for item details and a post button",
         title: "Item capture & posting",
-        body: "A guided capture flow — photograph the item, add context, and flag whether you're selling or just curious — before it goes live to the community.",
+        body: "A guided capture flow: photograph the item, add context, and flag whether you're selling or just curious, before it goes live to the community.",
       },
     ],
     map: {
       src: "/chattic-journey-map.png",
       alt: "Application flowchart for Chattic mapping the splash screen, home screen navigation, and every core user path",
       title: "Mapping the app before designing it",
-      body: "Before any screen took shape, I flowcharted the full application — every nav path, state, and decision point — so the client could sign off on scope before design began. That map became the backbone for the 30+ screen system that followed.",
+      body: "Before any screen took shape, I flowcharted the full application: every nav path, state, and decision point, so the client could sign off on scope before design began. That map became the backbone for the 30+ screen system that followed.",
     },
     details: [
       {
         label: "Product architecture",
-        body: "Mapped the complete application flow — navigation, screen states, and interaction logic — turning an ambiguous app concept into a buildable specification.",
+        body: "Mapped the complete application flow, including navigation, screen states, and interaction logic, turning an ambiguous app concept into a buildable specification.",
       },
       {
         label: "System design",
@@ -505,7 +569,7 @@ export const CASE_STUDIES: CaseStudy[] = [
       },
       {
         label: "Brand & UI",
-        body: "Translated the client's brand identity into a cohesive mobile UI — typography, color, and iconography consistent across every screen and state.",
+        body: "Translated the client's brand identity into a cohesive mobile UI: typography, color, and iconography consistent across every screen and state.",
       },
       {
         label: "Team leadership",
@@ -533,13 +597,13 @@ export const CASE_STUDIES: CaseStudy[] = [
         src: "/ge-cockpit-dashboard.png",
         alt: "GE Digital Cockpit dashboard with color-coded status cards and a live WIP tracker chart across every production station",
         title: "Color-coded status cards",
-        body: "The shipped design — quick-action cards color-coded by severity (blue, amber, red, green) so an operator can gauge line health without reading a label, backed by a live WIP tracker spanning every station on the GE9X production line.",
+        body: "The shipped design: quick-action cards color-coded by severity (blue, amber, red, green) so an operator can gauge line health without reading a label, backed by a live WIP tracker spanning every station on the GE9X production line.",
       },
       {
         src: "/ge-cockpit-buttons.png",
         alt: "Earlier version of the GE Digital Cockpit dashboard with all quick-action cards in a single blue color",
         title: "Where it started",
-        body: "The original layout used a single accent color for every action card. Recoloring each card by severity turned a glance-and-guess interface into one operators could scan in under a second — a small change with an outsized impact on shop-floor speed.",
+        body: "The original layout used a single accent color for every action card. Recoloring each card by severity turned a glance-and-guess interface into one operators could scan in under a second, a small change with an outsized impact on shop-floor speed.",
       },
     ],
     details: [
@@ -598,12 +662,12 @@ export const PROCESS = [
   {
     step: "01",
     title: "Frame the real problem",
-    body: "Partner with Product, Engineering, and Data Science before opening Figma — most bad products solve the wrong problem beautifully.",
+    body: "Partner with Product, Engineering, and Data Science before opening Figma. Most bad products solve the wrong problem beautifully.",
   },
   {
     step: "02",
     title: "Put AI to work",
-    body: "Use Claude, ChatGPT, Copilot, and Figma AI to accelerate research, documentation, and exploration — without cutting corners on craft.",
+    body: "Use Claude, ChatGPT, Copilot, and Figma AI to accelerate research, documentation, and exploration, without cutting corners on craft.",
   },
   {
     step: "03",
@@ -622,13 +686,13 @@ export const TESTIMONIALS = [
     quote:
       "Sean is a very motivated, passionate, and proactive designer. I was always impressed by his ability to build relationships with stakeholders and become a trusted partner. Sean is always open to feedback and looking for opportunities to make his designs better for his end users and the business. He also has experience in front-end development and project management, which allowed him to contribute value to the team beyond product design. He worked in a very complex space within Kroger — pricing systems — and did a great job managing the complexity and strong personalities.",
     name: "Brooke Neace",
-    title: "Principal Designer, AT&T — managed Sean directly at Kroger",
+    title: "Principal Designer, AT&T (managed Sean directly at Kroger)",
   },
   {
     quote:
       "One of the best UI/UX and product designers I've had the honor of working with. Once he's on your team, your UI stories go by in a breeze, and he proactively advises on best practices, layouts, components — you name it. He's the complete package on the product side and an absolute pleasure to work alongside.",
     name: "Ruben Singh Dangol",
-    title: "Full Stack Developer — Spring Boot, SQL, Angular, Kafka, React",
+    title: "Full Stack Developer: Spring Boot, SQL, Angular, Kafka, React",
   },
   {
     quote:

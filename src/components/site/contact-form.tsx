@@ -122,7 +122,7 @@ export function ContactForm() {
           <ArrowUpRight className="size-4" />
         </Button>
         <p className="mt-2 text-xs text-muted-foreground">
-          Opens your email app with this pre-filled — nothing sends until you
+          Opens your email app with this pre-filled. Nothing sends until you
           hit send there.
         </p>
       </div>

@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/site/navbar";
 import { Hero } from "@/components/site/hero";
 import { ValueProp } from "@/components/site/value-prop";
+import { FeaturedBuild } from "@/components/site/featured-build";
 import { SelectedWork } from "@/components/site/selected-work";
 import { About } from "@/components/site/about";
 import { Process } from "@/components/site/process";
@@ -16,6 +17,7 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <ValueProp />
+        <FeaturedBuild />
         <SelectedWork />
         <About />
         <Process />

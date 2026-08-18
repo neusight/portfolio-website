@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { ArrowUpRight, Maximize2 } from "lucide-react";
 import type { CaseStudy } from "@/lib/data";
@@ -8,7 +10,25 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { Lightbox } from "@/components/site/lightbox";
+
+// A small "live" indicator for projects with a real public URL — sits over
+// the cover art so it reads before a visitor even opens the card, signaling
+// this one isn't gated behind the work-gate password like the studies below it.
+function LiveBadge({ badge }: { badge?: string }) {
+  if (!badge) return null;
+
+  return (
+    <span className="absolute top-4 left-4 z-10 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-black/50 px-3 py-1 text-xs font-medium text-white backdrop-blur-md">
+      <span className="relative flex size-1.5">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+        <span className="relative inline-flex size-1.5 rounded-full bg-emerald-400" />
+      </span>
+      {badge}
+    </span>
+  );
+}
 
 const GRADIENTS: Record<CaseStudy["gradient"], string> = {
   signature:
@@ -266,11 +286,14 @@ export function CaseStudyCard({
         <button
           type="button"
           className={cn(
-            "group relative flex w-full flex-col overflow-hidden rounded-3xl border-gradient-card text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]",
+            "group relative flex w-full cursor-pointer flex-col overflow-hidden rounded-3xl border-gradient-card text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]",
             featured && "sm:col-span-2",
           )}
         >
-          <CoverArt study={study} featured={featured} context="card" />
+          <div className="relative">
+            <CoverArt study={study} featured={featured} context="card" />
+            <LiveBadge badge={study.badge} />
+          </div>
 
           <div className="flex flex-1 flex-col gap-3 p-5 sm:p-6">
             <div className="flex items-center justify-between text-xs text-muted-foreground">
@@ -346,9 +369,23 @@ export function CaseStudyCard({
               <h2 className="mt-2 text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
                 {study.title}
               </h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {study.client} · {study.role}
-              </p>
+              <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
+                <p className="text-sm text-muted-foreground">
+                  {study.client} · {study.role}
+                </p>
+                {study.liveUrl && (
+                  <Button asChild size="sm" className="shrink-0 gap-1.5">
+                    <a
+                      href={study.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View it live
+                      <ArrowUpRight className="size-3.5" />
+                    </a>
+                  </Button>
+                )}
+              </div>
             </div>
 
             <p className="text-sm leading-relaxed text-foreground/90">
